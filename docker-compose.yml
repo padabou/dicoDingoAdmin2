@@ -1,0 +1,6 @@
+services:
+  admin-v2:
+    image: dicoDingo/admin2
+    container_name: admin-v2
+    ports:
+      - 3005:3000
