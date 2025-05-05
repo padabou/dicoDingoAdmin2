@@ -24,7 +24,7 @@ const create = (data) => {
 };
 
 const deleteType = (id) => {
-  return axiosInstanceSecure.delete(`${API_URL}${id}`, { headers: authHeader() })
+  return axiosInstanceSecure.delete(`${API_URL}/${id}`, { headers: authHeader() })
 }
 
 
