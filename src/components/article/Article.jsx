@@ -379,6 +379,17 @@ const Article = () => {
             )}
           </div>
         </div>
+        <div className="row m-3">
+          <div className="col-auto">
+            <div className="form-check form-switch m-3">
+              <input className="form-check-input" type="checkbox" id="sitemapEnable" name="sitemapEnable" checked={sitemapEnable}
+                     onChange={(e) => onChangeSitemapEnable(e)}/>
+              <label className="form-check-label" htmlFor="sitemapEnable">Enable sitemap now</label>
+            </div>
+            <label htmlFor="dateToSitemap">Date d'ajout au sitemap</label>
+            <SitemapDate updateDate={dateToSitemap} onChangeUpdateDate={onChangeDateToSitemap}/>
+          </div>
+        </div>
         <div className="row m-2">
           <div className="col-auto">
             <label htmlFor="metaTitle">Meta Title</label>
@@ -733,17 +744,7 @@ const Article = () => {
               ))}
             </>
         )}
-        <div className="row m-3">
-          <div className="col-auto">
-            <div className="form-check form-switch m-3">
-              <input className="form-check-input" type="checkbox" id="sitemapEnable" name="sitemapEnable" checked={sitemapEnable}
-                     onChange={(e) => onChangeSitemapEnable(e)}/>
-              <label className="form-check-label" htmlFor="sitemapEnable">Enable sitemap now</label>
-            </div>
-            <label htmlFor="dateToSitemap">Date d'ajout au sitemap</label>
-            <SitemapDate updateDate={dateToSitemap} onChangeUpdateDate={onChangeDateToSitemap}/>
-          </div>
-        </div>
+
         <div className="form-check form-switch m-3">
           <input className="form-check-input" type="checkbox" id="enabled" name="enabled" checked={enabled}
                  onChange={(e) => onChangeEnabled(e)}/>
