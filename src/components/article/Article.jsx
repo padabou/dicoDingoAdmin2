@@ -304,6 +304,14 @@ const Article = () => {
       <h1>{type} - {title}</h1>
       <p>Updated Date : {createdAt}</p>
       <form action={formAction}>
+        <div className="form-group m-3">
+          <button className="btn btn-primary btn-block" disabled={loading} type="submit">
+            {loading && (
+                <span className="spinner-border spinner-border-sm"></span>
+            )}
+            <span>Mise à jour</span>
+          </button>
+        </div>
         <div className="row m-3">
           <div className="col-auto">
             <label htmlFor="title">Titre</label>
