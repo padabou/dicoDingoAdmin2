@@ -397,6 +397,20 @@ const Article = () => {
             <label htmlFor="dateToSitemap">Date d'ajout au sitemap</label>
             <SitemapDate updateDate={dateToSitemap} onChangeUpdateDate={onChangeDateToSitemap}/>
           </div>
+          <div className="col-auto">
+            <div className="form-check form-switch m-3">
+              <input className="form-check-input" type="checkbox" id="enabled" name="enabled" checked={enabled}
+                     onChange={(e) => onChangeEnabled(e)}/>
+              <label className="form-check-label" htmlFor="enabled">Enabled page</label>
+            </div>
+          </div>
+          <div className="col-auto">
+            <div className="form-check form-switch m-3">
+              <input className="form-check-input" type="checkbox" id="refreshContent" name="refreshContent" checked={refreshContent}
+                     onChange={(e) => onChangeRefreshContent(e)}/>
+              <label className="form-check-label" htmlFor="refreshContent">Refresh Content from IA</label>
+            </div>
+          </div>
         </div>
         <div className="row m-2">
           <div className="col-auto">
