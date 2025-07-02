@@ -274,10 +274,6 @@ const ArticleCreate = () => {
       formData.append("sitemapDateAdd", dateToSitemap);
     }
 
-    if (picture) {
-      formData.append("picture", picture, picture.name);
-    }
-
     serializeNestedJsonToFormData(formData, content);
 
     const arrayTags = Array.from(myTags, ([name, value]) => ({

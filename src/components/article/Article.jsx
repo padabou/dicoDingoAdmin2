@@ -1,5 +1,5 @@
 import React, {useActionState, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import {RichTextArea} from "../../designComponents/rich-text-area";
 import ArticleService from "../../services/article.service";
 import Iconify from "../../designComponents/iconify";
@@ -244,7 +244,7 @@ const Article = () => {
       }
     }
   };
-
+  const navigate = useNavigate();
   const [state, formAction] = useActionState(handleUpdate, {});
 
   function handleUpdate (prevState, formData) {
@@ -269,10 +269,10 @@ const Article = () => {
       formData.append("sitemapDateAdd", dateToSitemap);
     }
 
-      if (picture) {
+    /*  if (picture) {
         formData.append("picture", picture, picture.name);
       }
-
+*/
       serializeNestedJsonToFormData(formData, content);
 
       const arrayTags = Array.from(myTags, ([name, value]) => ({
@@ -453,6 +453,7 @@ const Article = () => {
             <input
                 className="button-blog"
                 type="file"
+                name="pictureFile"
                 onChange={(e) => {
                   setPicture(e.target.files[0]);
                 }}
@@ -767,16 +768,6 @@ const Article = () => {
             </>
         )}
 
-        <div className="form-check form-switch m-3">
-          <input className="form-check-input" type="checkbox" id="enabled" name="enabled" checked={enabled}
-                 onChange={(e) => onChangeEnabled(e)}/>
-          <label className="form-check-label" htmlFor="enabled">Enabled page</label>
-        </div>
-        <div className="form-check form-switch m-3">
-          <input className="form-check-input" type="checkbox" id="refreshContent" name="refreshContent" checked={refreshContent}
-                 onChange={(e) => onChangeRefreshContent(e)}/>
-          <label className="form-check-label" htmlFor="refreshContent">Refresh Content from IA</label>
-        </div>
         <div className="form-group m-3">
           <button className="btn btn-primary btn-block" disabled={loading} type="submit">
             {loading && (
