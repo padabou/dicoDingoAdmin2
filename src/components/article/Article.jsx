@@ -388,6 +388,40 @@ const Article = () => {
           </div>
         </div>
         <div className="row m-3">
+          <h2>Image principale</h2>
+          <div className={'col-auto'}>
+            <input
+                className="button-blog"
+                type="file"
+                name="pictureFile"
+                onChange={(e) => {
+                  setPicture(e.target.files[0]);
+                }}
+                accept=".jpeg, .JPEG, .jpg, .JPG, .png, .PNG, .webp, .WEBP, .svg, .SVG, .heif, .HEIF, .avif, .AVIF"
+            />
+          </div>
+          <div className={'col-auto'}>
+            <input
+                type="text"
+                className="form-control"
+                name="pictureLink"
+                value={pictureLink}
+                onChange={(e) => setPictureLink(e.target.value)}
+                placeholder={'Url de l\'image'}
+            />
+          </div>
+          <div className="col-auto">
+            <input
+                type="text"
+                className="form-control"
+                name="pictureAlt"
+                value={pictureAlt}
+                onChange={onChangePictureAlt}
+                placeholder={'Titre de l\'image'}
+            />
+          </div>
+        </div>
+        <div className="row m-3">
           <div className="col-auto">
             <div className="form-check form-switch m-3">
               <input className="form-check-input" type="checkbox" id="sitemapEnable" name="sitemapEnable" checked={sitemapEnable}
@@ -447,40 +481,7 @@ const Article = () => {
         </div>
 
 
-        <div className="row m-3">
-          <h2>Image principale</h2>
-          <div className={'col-auto'}>
-            <input
-                className="button-blog"
-                type="file"
-                name="pictureFile"
-                onChange={(e) => {
-                  setPicture(e.target.files[0]);
-                }}
-                accept=".jpeg, .JPEG, .jpg, .JPG, .png, .PNG, .webp, .WEBP, .svg, .SVG, .heif, .HEIF, .avif, .AVIF"
-            />
-          </div>
-          <div className={'col-auto'}>
-            <input
-                type="text"
-                className="form-control"
-                name="pictureLink"
-                value={pictureLink}
-                onChange={(e) => setPictureLink(e.target.value)}
-                placeholder={'Url de l\'image'}
-            />
-          </div>
-          <div className="col-auto">
-            <input
-                type="text"
-                className="form-control"
-                name="pictureAlt"
-                value={pictureAlt}
-                onChange={onChangePictureAlt}
-                placeholder={'Titre de l\'image'}
-            />
-          </div>
-        </div>
+
         <button className="button-blog btn btn-info m-3" onClick={addContentNiv0}>
           + Paragraphe
         </button>

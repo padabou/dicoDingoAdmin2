@@ -392,6 +392,39 @@ const ArticleCreate = () => {
             )}
           </div>
         </div>
+        <div className="row m-3">
+          <h2>Image principale</h2>
+          <div className={'col-auto'}>
+            <input
+                className="button-blog"
+                type="file"
+                onChange={(e) => {
+                  setPicture(e.target.files[0]);
+                }}
+                accept=".jpeg, .JPEG, .jpg, .JPG, .png, .PNG, .webp, .WEBP, .svg, .SVG, .heif, .HEIF, .avif, .AVIF"
+            />
+          </div>
+          <div className={'col-auto'}>
+            <input
+                type="text"
+                className="form-control"
+                name="pictureLink"
+                value={pictureLink}
+                onChange={(e) => setPictureLink(e.target.value)}
+                placeholder={'Url de l\'image'}
+            />
+          </div>
+          <div className="col-auto">
+            <input
+                type="text"
+                className="form-control"
+                name="pictureAlt"
+                value={pictureAlt}
+                onChange={onChangePictureAlt}
+                placeholder={'Titre de l\'image'}
+            />
+          </div>
+        </div>
         <div className="row m-2">
           <div className="col-auto">
             <label htmlFor="metaTitle">Meta Title</label>
@@ -427,39 +460,7 @@ const ArticleCreate = () => {
             />
           </div>
         </div>
-            <div className="row m-3">
-              <h2>Image principale</h2>
-              <div className={'col-auto'}>
-                <input
-                    className="button-blog"
-                    type="file"
-                    onChange={(e) => {
-                      setPicture(e.target.files[0]);
-                    }}
-                    accept=".jpeg, .JPEG, .jpg, .JPG, .png, .PNG, .webp, .WEBP, .svg, .SVG, .heif, .HEIF, .avif, .AVIF"
-                />
-              </div>
-              <div className={'col-auto'}>
-                <input
-                    type="text"
-                    className="form-control"
-                    name="pictureLink"
-                    value={pictureLink}
-                    onChange={(e) => setPictureLink(e.target.value)}
-                    placeholder={'Url de l\'image'}
-                />
-              </div>
-              <div className="col-auto">
-                <input
-                    type="text"
-                    className="form-control"
-                    name="pictureAlt"
-                    value={pictureAlt}
-                    onChange={onChangePictureAlt}
-                    placeholder={'Titre de l\'image'}
-                />
-              </div>
-            </div>
+
             <button className="button-blog btn btn-info m-3" onClick={addContentNiv0}>
               + Paragraphe
             </button>
