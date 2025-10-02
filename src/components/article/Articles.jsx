@@ -42,8 +42,8 @@ const Articles = () => {
         const [order, setOrder] = useState('asc');
         const [selected, setSelected] = useState([]);
         const [orderBy, setOrderBy] = useState('name');
-        const [filterName, setFilterName] = useState('');
-        const [rowsPerPage, setRowsPerPage] = useState(5);
+        const [filterName, setFilterName] = useState(searchParams.get('query'));
+        const [rowsPerPage, setRowsPerPage] = useState(25);
         const [filteredItems, setFilteredItems] = useState([]);
         const [isNotFound, setIsNotFound] = useState(false);
 
@@ -69,136 +69,155 @@ const Articles = () => {
             );
         }, [type]);
 
-        useEffect(() => {
-            typeService.getAll().then(
-                (response) => {
-                    setTypes(response.data);
-                },
-                (error) => {
-                    const _content =
-                        (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
-                        error.message ||
-                        error.toString();
+    useEffect(() => {
+        const params = new URLSearchParams();
+        if(searchParams.get('sitemapAdded')) {
+            params.set('sitemapAdded', searchParams.get('sitemapAdded'));
+        }
+        if(searchParams.get('enabled')) {
+            params.set('enabled', searchParams.get('enabled'));
+        }
+        if(searchParams.get('type')) {
+            params.set('type', searchParams.get('type'));
+        }
+        params.set('query', filterName);
 
-                    setList(_content);
+        setSearchParams(params);
+    }, [filterName]);
 
-                    if (error.response && error.response.status === 401) {
-                        EventBus.dispatch("logout");
-                    }
+    useEffect(() => {
+        typeService.getAll().then(
+            (response) => {
+                setTypes(response.data);
+            },
+            (error) => {
+                const _content =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                setList(_content);
+
+                if (error.response && error.response.status === 401) {
+                    EventBus.dispatch("logout");
                 }
-            );
-        }, []);
-
-        const onChangeType = (e) => {
-            const params = new URLSearchParams();
-            if(searchParams.get('sitemapAdded')) {
-                params.set('sitemapAdded', searchParams.get('sitemapAdded'));
             }
-            if(searchParams.get('enabled')) {
-                params.set('enabled', searchParams.get('enabled'));
-            }
-            params.set('type', e.target.value);
+        );
+    }, []);
 
-            setSearchParams(params);
-            setType(e.target.value);
-        };
-
-        const handleOpenMenu = (event, id, slug, label) => {
-            setEditId(id);
-            setEditLabel(label);
-            setOpen(event.currentTarget);
-        };
-
-        const handleCloseMenu = () => {
-            setOpen(null);
-        };
-
-        const handleRequestSort = (event, property) => {
-            const isAsc = orderBy === property && order === 'asc';
-            setOrder(isAsc ? 'desc' : 'asc');
-            setOrderBy(property);
-        };
-
-        const handleSelectAllClick = (event) => {
-            if (event.target.checked) {
-                const newSelecteds = list.map((n) => n.name);
-                setSelected(newSelecteds);
-                return;
-            }
-            setSelected([]);
-        };
-
-        const handleClick = (event, name) => {
-            const selectedIndex = selected.indexOf(name);
-            let newSelected = [];
-            if (selectedIndex === -1) {
-                newSelected = newSelected.concat(selected, name);
-            } else if (selectedIndex === 0) {
-                newSelected = newSelected.concat(selected.slice(1));
-            } else if (selectedIndex === selected.length - 1) {
-                newSelected = newSelected.concat(selected.slice(0, -1));
-            } else if (selectedIndex > 0) {
-                newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-            }
-            setSelected(newSelected);
-        };
-
-        const handleChangePage = (event, newPage) => {
-            setPage(newPage);
-        };
-
-        const handleChangeRowsPerPage = (event) => {
-            setPage(0);
-            setRowsPerPage(parseInt(event.target.value, 10));
-        };
-
-        const handleFilterByName = (event) => {
-            setPage(0);
-            setFilterName(event.target.value);
-            setIsNotFound(!filteredItems.length && !!event.target.value)
-        };
-
-        const applySortFilter = (array, comparator, query) => {
-            const stabilizedThis = array.map((el, index) => [el, index]);
-            stabilizedThis.sort((a, b) => {
-                let order = comparator(a[0], b[0]);
-                if (order !== 0) return order;
-                return a[1] - b[1];
-            });
-            if (query) {
-                return filter(array, (_item) => _item.title.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-            }
-            return stabilizedThis.map((el) => el[0]);
+    const onChangeType = (e) => {
+        const params = new URLSearchParams();
+        if(searchParams.get('sitemapAdded')) {
+            params.set('sitemapAdded', searchParams.get('sitemapAdded'));
         }
-
-        const descendingComparator = (a, b, orderBy) => {
-            if (b[orderBy] < a[orderBy]) {
-                return -1;
-            }
-            if (b[orderBy] > a[orderBy]) {
-                return 1;
-            }
-            return 0;
+        if(searchParams.get('enabled')) {
+            params.set('enabled', searchParams.get('enabled'));
         }
+        params.set('query', filterName);
+        params.set('type', e.target.value);
 
-        const emptyRows = false;//page > 0 ? Math.max(0, (1 + page) * rowsPerPage - departmentList.length) : 0;
+        setSearchParams(params);
+        setType(e.target.value);
+    };
 
-        const TABLE_HEAD = [
-            {id: 'title', label: 'title', alignRight: false},
-            {id: 'type', label: 'type', alignRight: false},
-            {id: 'slug', label: 'slug', alignRight: false},
-            {id: 'picture', label: 'picture', alignRight: false},
-            {id: 'createdAt', label: 'Updte Date', alignRight: false},
-            {id: ''},
-        ];
 
-        const navigate = useNavigate();
+    const handleOpenMenu = (event, id, slug, label) => {
+        setEditId(id);
+        setEditLabel(label);
+        setOpen(event.currentTarget);
+    };
 
-        const createArticle = () => {
-          navigate("/article/create");
-        };
+    const handleCloseMenu = () => {
+        setOpen(null);
+    };
+
+    const handleRequestSort = (event, property) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
+
+    const handleSelectAllClick = (event) => {
+        if (event.target.checked) {
+            const newSelecteds = list.map((n) => n.name);
+            setSelected(newSelecteds);
+            return;
+        }
+        setSelected([]);
+    };
+
+    const handleClick = (event, name) => {
+        const selectedIndex = selected.indexOf(name);
+        let newSelected = [];
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selected, name);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+            newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+        }
+        setSelected(newSelected);
+    };
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setPage(0);
+        setRowsPerPage(parseInt(event.target.value, 10));
+    };
+
+    const handleFilterByName = (event) => {
+        setPage(0);
+        setFilterName(event.target.value);
+        searchParams.set('query', searchParams.get(event.target.value));
+        setIsNotFound(!filteredItems.length && !!event.target.value);
+    };
+
+    const applySortFilter = (array, comparator, query) => {
+        const stabilizedThis = array.map((el, index) => [el, index]);
+        stabilizedThis.sort((a, b) => {
+            let order = comparator(a[0], b[0]);
+            if (order !== 0) return order;
+            return a[1] - b[1];
+        });
+        if (query) {
+            return filter(array, (_item) => _item?.title?.toLowerCase().indexOf(query?.toLowerCase()) !== -1);
+        }
+        return stabilizedThis.map((el) => el[0]);
+    }
+
+    const descendingComparator = (a, b, orderBy) => {
+        if (b[orderBy] < a[orderBy]) {
+            return -1;
+        }
+        if (b[orderBy] > a[orderBy]) {
+            return 1;
+        }
+        return 0;
+    }
+
+    const emptyRows = false;//page > 0 ? Math.max(0, (1 + page) * rowsPerPage - departmentList.length) : 0;
+
+    const TABLE_HEAD = [
+        {id: 'title', label: 'title', alignRight: false},
+        {id: 'type', label: 'type', alignRight: false},
+        {id: 'slug', label: 'slug', alignRight: false},
+        {id: 'picture', label: 'picture', alignRight: false},
+        {id: 'createdAt', label: 'Updte Date', alignRight: false},
+        {id: ''},
+    ];
+
+    const navigate = useNavigate();
+
+    const createArticle = () => {
+      navigate("/article/create");
+    };
 
     const createArticles = () => {
         navigate("/article/createByList");
@@ -336,7 +355,7 @@ const Articles = () => {
                   </Scrollbar>
 
                   <TablePagination
-                      rowsPerPageOptions={[5, 10, 25]}
+                      rowsPerPageOptions={[25, 50, 100]}
                       component="div"
                       count={list.length}
                       rowsPerPage={rowsPerPage}

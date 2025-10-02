@@ -34,6 +34,7 @@ const Article = () => {
   const [pictureLink, setPictureLink] = useState("");
   const [createdAt, setCreatedAt] = useState("");
   const [myTags, setMyTag] = useState(new Map());
+  const [publicUrl, setPublicUrl] = useState("");
 
   useEffect(() => {
     ArticleService.getById(id).then(
@@ -58,6 +59,7 @@ const Article = () => {
           setRefreshContent(response.data?.refreshContent || false);
           setPictureLink(response.data?.picture || "");
           setCreatedAt(response.data?.createdAt || "");
+          setPublicUrl(response.data?.url || "");
           response.data?.tags?.forEach((tag) => {
             myTags.set(tag.id, true);
           });
@@ -305,12 +307,13 @@ const Article = () => {
       <p>Updated Date : {createdAt}</p>
       <form action={formAction}>
         <div className="form-group m-3">
-          <button className="btn btn-primary btn-block" disabled={loading} type="submit">
+          <button className="btn btn-primary btn-block mx-2" disabled={loading} type="submit">
             {loading && (
                 <span className="spinner-border spinner-border-sm"></span>
             )}
             <span>Mise à jour</span>
           </button>
+          <a href={publicUrl} className="btn btn-primary btn-block" target={"_blank"}>Accéder à la page</a>
         </div>
         <div className="row m-3">
           <div className="col-auto">

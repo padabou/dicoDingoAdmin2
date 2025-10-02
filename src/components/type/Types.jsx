@@ -41,7 +41,7 @@ const Types = () => {
         const [selected, setSelected] = useState([]);
         const [orderBy, setOrderBy] = useState('name');
         const [filterName, setFilterName] = useState('');
-        const [rowsPerPage, setRowsPerPage] = useState(5);
+        const [rowsPerPage, setRowsPerPage] = useState(25);
         const [filteredItems, setFilteredItems] = useState([]);
         const [isNotFound, setIsNotFound] = useState(false);
         const handleOpenMenu = (event, id, slug, label) => {
@@ -269,7 +269,7 @@ const Types = () => {
                   </Scrollbar>
 
                   <TablePagination
-                      rowsPerPageOptions={[5, 10, 25]}
+                      rowsPerPageOptions={[25, 50, 100]}
                       component="div"
                       count={list.length}
                       rowsPerPage={rowsPerPage}
