@@ -80,8 +80,9 @@ const Articles = () => {
         if(searchParams.get('type')) {
             params.set('type', searchParams.get('type'));
         }
-        params.set('query', filterName);
-
+        if(filterName) {
+            params.set('query', filterName);
+        }
         setSearchParams(params);
     }, [filterName]);
 
@@ -115,7 +116,9 @@ const Articles = () => {
         if(searchParams.get('enabled')) {
             params.set('enabled', searchParams.get('enabled'));
         }
-        params.set('query', filterName);
+        if(filterName) {
+            params.set('query', filterName);
+        }
         params.set('type', e.target.value);
 
         setSearchParams(params);
@@ -275,7 +278,15 @@ const Articles = () => {
               <Card>
                   <ArrayListToolbar numSelected={selected.length} filterName={filterName}
                                     onFilterName={handleFilterByName}/>
-
+                  <TablePagination
+                      rowsPerPageOptions={[25, 50, 100]}
+                      component="div"
+                      count={list.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
                   <Scrollbar>
                       <TableContainer sx={{minWidth: 800}}>
                           <Table>
