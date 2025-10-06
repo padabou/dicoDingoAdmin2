@@ -40,30 +40,7 @@ const Article = () => {
     ArticleService.getById(id).then(
       (response) => {
         if (response?.data) {
-          setTitle(response.data?.title || "");
-          setType(response.data?.type || "");
-          setH1Title(response.data?.h1Title || "");
-          setContent(response.data?.content || []);
-          setMetaTitle(response.data?.metaTitle || "");
-          setMetaDescription(response.data?.metaDescription || "");
-          setPictureAlt(response.data?.pictureAlt || "");
-          setSlug(response.data?.slug || "");
-          setTitleBreadcrumb(response.data?.titleBreadcrumb || "");
-          setReadingTime(response.data?.readingTime || "");
-          setLang(response.data?.lang || "");
-          setIntro(response.data?.intro || "");
-          setConclusion(response.data?.conclusion || "");
-          setDateToSitemap(response.data?.sitemapDateAdd || "");
-          setEnabled(response.data?.enabled || false);
-          setSitemapEnable(response.data?.sitemapEnable || false);
-          setRefreshContent(response.data?.refreshContent || false);
-          setPictureLink(response.data?.picture || "");
-          setCreatedAt(response.data?.createdAt || "");
-          setPublicUrl(response.data?.url || "");
-          response.data?.tags?.forEach((tag) => {
-            myTags.set(tag.id, true);
-          });
-          setMyTag(myTags);
+          fillSubmit(response);
         } else if (id === undefined) {
           setContent([{ subContent: [] }]);
         }
@@ -76,6 +53,33 @@ const Article = () => {
       }
     }); */
   }, [id]);
+
+  const fillSubmit = (response) => {
+    setTitle(response.data?.title || "");
+    setType(response.data?.type || "");
+    setH1Title(response.data?.h1Title || "");
+    setContent(response.data?.content || []);
+    setMetaTitle(response.data?.metaTitle || "");
+    setMetaDescription(response.data?.metaDescription || "");
+    setPictureAlt(response.data?.pictureAlt || "");
+    setSlug(response.data?.slug || "");
+    setTitleBreadcrumb(response.data?.titleBreadcrumb || "");
+    setReadingTime(response.data?.readingTime || "");
+    setLang(response.data?.lang || "");
+    setIntro(response.data?.intro || "");
+    setConclusion(response.data?.conclusion || "");
+    setDateToSitemap(response.data?.sitemapDateAdd || "");
+    setEnabled(response.data?.enabled || false);
+    setSitemapEnable(response.data?.sitemapEnable || false);
+    setRefreshContent(response.data?.refreshContent || false);
+    setPictureLink(response.data?.picture || "");
+    setCreatedAt(response.data?.createdAt || "");
+    setPublicUrl(response.data?.url || "");
+    response.data?.tags?.forEach((tag) => {
+      myTags.set(tag.id, true);
+    });
+    setMyTag(myTags);
+  }
 
   const schema = z.object({
     title: z.string().min(1, "Le titre est requis"),
@@ -293,6 +297,7 @@ const Article = () => {
           (response) => {
             setLoading(false);
             setMessage("Article " + title + " a été modifié");
+            fillSubmit(response);
           },
           (error) => {
             setMessage(error);

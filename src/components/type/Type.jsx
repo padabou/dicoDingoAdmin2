@@ -88,6 +88,16 @@ const Type = () => {
       TypeService.update(id, formData).then((response) => {
         setLoading(false);
         setMessage("Le type " + type + " a été mis à jour !!");
+        setTitle(response.data?.title || "");
+        setType(response.data?.name || "");
+        setMetaTitle(response.data?.metaTitle || "");
+        setMetaDescription(response.data?.metaDescription || "");
+        setPictureAlt(response.data?.pictureAlt || "");
+        setPicture(response.data?.picture || "");
+        setTitleBreadcrumb(response.data?.titleBreadcrumb || "");
+        setIntro(response.data?.intro || "");
+        setEnabled(response.data?.enabled || false);
+        setSlug(response.data?.slug || false);
       },
           (error) => {
             setLoading(false);

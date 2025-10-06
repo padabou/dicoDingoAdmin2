@@ -38,7 +38,7 @@ const Articles = () => {
         const [dialogOpen, setDialogOpen] = useState(false);
         const [editId, setEditId] = useState(0);
         const [editLabel, setEditLabel] = useState("");
-        const [page, setPage] = useState(0);
+        const [page, setPage] = useState(searchParams.get('page') ? parseInt(searchParams.get('page')) : 0);
         const [order, setOrder] = useState('asc');
         const [selected, setSelected] = useState([]);
         const [orderBy, setOrderBy] = useState('name');
@@ -70,6 +70,10 @@ const Articles = () => {
         }, [type]);
 
     useEffect(() => {
+        updateSearchParams();
+    }, [filterName]);
+
+    const updateSearchParams = () => {
         const params = new URLSearchParams();
         if(searchParams.get('sitemapAdded')) {
             params.set('sitemapAdded', searchParams.get('sitemapAdded'));
@@ -83,8 +87,12 @@ const Articles = () => {
         if(filterName) {
             params.set('query', filterName);
         }
+
+        if(page) {
+            params.set('page', page);
+        }
         setSearchParams(params);
-    }, [filterName]);
+    }
 
     useEffect(() => {
         typeService.getAll().then(
@@ -118,6 +126,9 @@ const Articles = () => {
         }
         if(filterName) {
             params.set('query', filterName);
+        }
+        if(page) {
+            params.set('page', page);
         }
         params.set('type', e.target.value);
 
@@ -168,6 +179,25 @@ const Articles = () => {
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+        const params = new URLSearchParams();
+        if(searchParams.get('sitemapAdded')) {
+            params.set('sitemapAdded', searchParams.get('sitemapAdded'));
+        }
+        if(searchParams.get('enabled')) {
+            params.set('enabled', searchParams.get('enabled'));
+        }
+        if(searchParams.get('type')) {
+            params.set('type', searchParams.get('type'));
+        }
+        if(filterName) {
+            params.set('query', filterName);
+        }
+
+        if(page) {
+            params.set('page', newPage);
+        }
+        setSearchParams(params);
+
     };
 
     const handleChangeRowsPerPage = (event) => {
@@ -395,9 +425,11 @@ const Articles = () => {
                   },
               }}
           >
-              <MenuItem sx={{ color: 'primary.main' }} onClick={handleEdit}>
+              <MenuItem sx={{ color: 'primary.main' }}>
+                  <a href={`/article/${editId}`} onClick={handleCloseMenu}>
                   <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
                   Edit
+                  </a>
               </MenuItem>
 
               <MenuItem sx={{ color: 'error.main' }} onClick={() => setDialogOpen(true)}>
