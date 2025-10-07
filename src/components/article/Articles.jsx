@@ -47,6 +47,8 @@ const Articles = () => {
         const [filteredItems, setFilteredItems] = useState([]);
         const [isNotFound, setIsNotFound] = useState(false);
 
+        const customBaseName = import.meta.env.VITE_APP_BASENAME ? '/' + import.meta.env.VITE_APP_BASENAME : '';
+
         useEffect(() => {
             ArticleService.getAll(type ? type : searchParams.get('type') ? searchParams.get('type') : '', "FR",searchParams.get('sitemapAdded') ? searchParams.get('sitemapAdded') : '',searchParams.get('enabled') ? searchParams.get('enabled') : '').then(
                 (response) => {
@@ -426,7 +428,7 @@ const Articles = () => {
               }}
           >
               <MenuItem sx={{ color: 'primary.main' }}>
-                  <a href={`/article/${editId}`} onClick={handleCloseMenu}>
+                  <a href={`${customBaseName}/article/${editId}`} onClick={handleCloseMenu}>
                   <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
                   Edit
                   </a>
