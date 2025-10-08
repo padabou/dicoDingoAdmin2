@@ -240,10 +240,13 @@ const Articles = () => {
     const emptyRows = false;//page > 0 ? Math.max(0, (1 + page) * rowsPerPage - departmentList.length) : 0;
 
     const TABLE_HEAD = [
-        {id: 'title', label: 'title', alignRight: false},
-        {id: 'type', label: 'type', alignRight: false},
-        {id: 'slug', label: 'slug', alignRight: false},
-        {id: 'picture', label: 'picture', alignRight: false},
+        {id: 'title', label: 'Title', alignRight: false},
+        {id: 'type', label: 'Type', alignRight: false},
+        {id: 'slug', label: 'Slug', alignRight: false},
+        {id: 'enabled', label: 'Enabled', alignRight: false},
+        {id: 'sitemapEnable', label: 'In SteMp', alignRight: false},
+        {id: 'refreshContent', label: 'IA Refresh', alignRight: false},
+        {id: 'picture', label: 'Picture', alignRight: false},
         {id: 'createdAt', label: 'Updte Date', alignRight: false},
         {id: ''},
     ];
@@ -273,10 +276,6 @@ const Articles = () => {
         });
         setOpen(false);
         setDialogOpen(false);
-    }
-
-    const handleEdit = () => {
-        navigate(`/article/` + editId);
     }
 
   return (
@@ -333,7 +332,7 @@ const Articles = () => {
                               />
                               <TableBody>
                                   {filteredItems.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                                      const {id, title, slug, type, picture, createdAt} = row;
+                                      const {id, title, slug, type, enabled, sitemapEnable, refreshContent, picture, createdAt} = row;
                                       const selectedUser = selected.indexOf(title) !== -1;
 
                                       return (
@@ -351,6 +350,9 @@ const Articles = () => {
                                               </TableCell>
                                               <TableCell align="left">{type}</TableCell>
                                               <TableCell align="left">{slug}</TableCell>
+                                              <TableCell align="left">{enabled ? <Iconify icon={'fluent-color:checkmark-circle-20'} sx={{mr: 2}} title={'Article Enable'}/> : <Iconify icon={'fluent-color:dismiss-circle-20'} sx={{mr: 2}} title={'Article Disable'}/>}</TableCell>
+                                              <TableCell align="left">{sitemapEnable ? <Iconify icon={'fluent-color:checkmark-circle-20'} sx={{mr: 2}} title={'Sitemap Enable'}/> : <Iconify icon={'fluent-color:dismiss-circle-20'} sx={{mr: 2}} title={'Sitemap Disable'}/>}</TableCell>
+                                              <TableCell align="left">{refreshContent ? <Iconify icon={'fluent-color:checkmark-circle-20'} sx={{mr: 2}} title={'Refresh Enable'}/> : <Iconify icon={'fluent-color:dismiss-circle-20'} sx={{mr: 2}} title={'Refresh Disable'}/>}</TableCell>
                                               <TableCell align="left">{picture}</TableCell>
                                               <TableCell align="left">{createdAt}</TableCell>
 
