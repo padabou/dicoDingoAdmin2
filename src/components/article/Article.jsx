@@ -250,7 +250,6 @@ const Article = () => {
       }
     }
   };
-  const navigate = useNavigate();
   const [state, formAction] = useActionState(handleUpdate, {});
 
   function handleUpdate (prevState, formData) {

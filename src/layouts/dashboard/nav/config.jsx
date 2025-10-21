@@ -5,8 +5,9 @@
 import SvgColor from '../../../designComponents/svg-color';
 
 const icon = (name) => (
+
   <SvgColor
-    src={`${import.meta.env.VITE_APP_BASENAME}/assets/icons/navbar/${name}.svg`}
+    src={`${import.meta.env.VITE_APP_BASENAME ? '/' + import.meta.env.VITE_APP_BASENAME : ''}/assets/icons/navbar/${name}.svg`}
     sx={{ width: 1, height: 1 }}
   />
 );
@@ -18,7 +19,7 @@ const navConfig = [
     icon: icon('ic_blog'),
   },
   {
-    title: 'SITEMAP Check',
+    title: 'Sitemap Check',
     path: '/articles?sitemapAdded=false&enabled=true',
     icon: icon('ic_blog'),
   },
@@ -28,9 +29,14 @@ const navConfig = [
     icon: icon('ic_lock'),
   },
   {
-    title: 'TYPES',
+    title: 'Types',
     path: '/types',
     icon: icon('ic_horse'),
+  },
+  {
+    title: 'Message',
+    path: '/messages',
+    icon: icon('ic_notification_mail'),
   },
   {
     title: 'Utilisateur',

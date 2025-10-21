@@ -25,6 +25,12 @@ const update = (id, data) => {
   });
 };
 
+const updatePartially = (id, data) => {
+  return axiosInstanceSecure.patch(`${API_URL}/${id}`, data, {
+    headers: authHeader(),
+  });
+};
+
 
 const create = (data) => {
   return axiosInstanceSecure.post(`${API_URL}`, data, {
@@ -51,6 +57,7 @@ const ArticleService = {
   bulkCreate,
   deleteFrontDiscipline,
   getBySlug,
+  updatePartially,
 };
 
 export default ArticleService;

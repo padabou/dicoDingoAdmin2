@@ -25,6 +25,7 @@ import {AxiosInterceptor} from "./utils/axiosInterceptor.jsx";
 import CheckAuthProvider from "./components/CheckAuthProvider.jsx";
 import ThemeProvider from "./theme/index.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Messages from "./components/contact/Messages.jsx";
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter basename={import.meta.env.VITE_APP_BASENAME}>
@@ -41,6 +42,7 @@ createRoot(document.getElementById('root')).render(
                             <Route path="/article/:id" element={<Article />} />
                             <Route path="/articles/:type" element={<Articles />} />
                             <Route path="/articles" element={<Articles />} />
+                            <Route path="/messages" element={<Messages />} />
                             <Route path="/type/create" element={<TypeCreate />} />
                             <Route path="/type/:id" element={<Type />} />
                             <Route path="/types" element={<Types />} />
