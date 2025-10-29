@@ -43,6 +43,7 @@ const Articles = () => {
         const [selected, setSelected] = useState([]);
         const [orderBy, setOrderBy] = useState('name');
         const [filterName, setFilterName] = useState(searchParams.get('query'));
+        const [sitemapAdded, setSitemapAdded] = useState(searchParams.get('sitemapAdded'));
         const [rowsPerPage, setRowsPerPage] = useState(25);
         const [filteredItems, setFilteredItems] = useState([]);
         const [isNotFound, setIsNotFound] = useState(false);
@@ -69,7 +70,7 @@ const Articles = () => {
                     }
                 }
             );
-        }, [type]);
+        }, [type, sitemapAdded, searchParams]);
 
     useEffect(() => {
         updateSearchParams();
@@ -261,6 +262,28 @@ const Articles = () => {
         navigate("/article/createByList");
     };
 
+
+    const handleUpdate = (e, id, field, value) => {
+        console.log({ id, field, value });
+        console.log(e);
+        e = value;
+       // e.target.value = value;
+        /*
+        const formData = new FormData();
+        formData.append(field, value);
+
+        ArticleService.updatePartially(id, formData).then(
+            (response) => {
+                console.log("Article " + id + " a été modifié");
+                console.log(e.value);
+            },
+            (error) => {
+                console.error("Article " + id + " n'a pas été modifié", error);
+            }
+        );
+        */
+    }
+
     useEffect(() => {
         setFilteredItems(applySortFilter(list, order === 'desc'
             ? (a, b) => descendingComparator(a, b, orderBy)
@@ -332,7 +355,7 @@ const Articles = () => {
                               />
                               <TableBody>
                                   {filteredItems.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                                      const {id, title, slug, type, enabled, sitemapEnable, refreshContent, picture, createdAt} = row;
+                                      let {id, title, slug, type, enabled, sitemapEnable, refreshContent, picture, createdAt} = row;
                                       const selectedUser = selected.indexOf(title) !== -1;
 
                                       return (
@@ -350,7 +373,7 @@ const Articles = () => {
                                               </TableCell>
                                               <TableCell align="left">{type}</TableCell>
                                               <TableCell align="left">{slug}</TableCell>
-                                              <TableCell align="left">{enabled ? <Iconify icon={'fluent-color:checkmark-circle-20'} sx={{mr: 2}} title={'Article Enable'}/> : <Iconify icon={'fluent-color:dismiss-circle-20'} sx={{mr: 2}} title={'Article Disable'}/>}</TableCell>
+                                              <TableCell align="left" onClick={(event) => {enabled=!enabled; console.log(enabled + " - " + id);}}>{enabled ? "toto " + id: "titi " + id} <Iconify icon={enabled ? 'fluent-color:checkmark-circle-20' : 'fluent-color:dismiss-circle-20'} sx={{mr: 2}} title={'Article Enable'}/></TableCell>
                                               <TableCell align="left">{sitemapEnable ? <Iconify icon={'fluent-color:checkmark-circle-20'} sx={{mr: 2}} title={'Sitemap Enable'}/> : <Iconify icon={'fluent-color:dismiss-circle-20'} sx={{mr: 2}} title={'Sitemap Disable'}/>}</TableCell>
                                               <TableCell align="left">{refreshContent ? <Iconify icon={'fluent-color:checkmark-circle-20'} sx={{mr: 2}} title={'Refresh Enable'}/> : <Iconify icon={'fluent-color:dismiss-circle-20'} sx={{mr: 2}} title={'Refresh Disable'}/>}</TableCell>
                                               <TableCell align="left">{picture}</TableCell>
