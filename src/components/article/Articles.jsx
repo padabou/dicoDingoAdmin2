@@ -373,7 +373,7 @@ const Articles = () => {
                                               </TableCell>
                                               <TableCell align="left">{type}</TableCell>
                                               <TableCell align="left">{slug}</TableCell>
-                                              <TableCell align="left" onClick={(event) => {enabled=!enabled; console.log(enabled + " - " + id);}}>{enabled ? "toto " + id: "titi " + id} <Iconify icon={enabled ? 'fluent-color:checkmark-circle-20' : 'fluent-color:dismiss-circle-20'} sx={{mr: 2}} title={'Article Enable'}/></TableCell>
+                                              <TableCell align="left" onClick={(event) => {enabled=!enabled; }}><Iconify icon={enabled ? 'fluent-color:checkmark-circle-20' : 'fluent-color:dismiss-circle-20'} sx={{mr: 2}} title={'Article Enable'}/></TableCell>
                                               <TableCell align="left">{sitemapEnable ? <Iconify icon={'fluent-color:checkmark-circle-20'} sx={{mr: 2}} title={'Sitemap Enable'}/> : <Iconify icon={'fluent-color:dismiss-circle-20'} sx={{mr: 2}} title={'Sitemap Disable'}/>}</TableCell>
                                               <TableCell align="left">{refreshContent ? <Iconify icon={'fluent-color:checkmark-circle-20'} sx={{mr: 2}} title={'Refresh Enable'}/> : <Iconify icon={'fluent-color:dismiss-circle-20'} sx={{mr: 2}} title={'Refresh Disable'}/>}</TableCell>
                                               <TableCell align="left">{picture}</TableCell>
