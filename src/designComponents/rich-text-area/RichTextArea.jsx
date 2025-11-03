@@ -36,7 +36,7 @@ export default function RichTextArea({ ...props }) {
 
     return (
         <div>
-            <SunEditor setAllPlugins={true} setContents={props.content} name={props.name}  height="200px" validations={[required]} onChange={props.onChange}
+            <SunEditor key={props?.key} setAllPlugins={true} setContents={props.content} name={props.name}  height="200px" validations={[required]} onChange={props.onChange}
                           setOptions={{
                               buttonList: [
                                   ["undo", "redo"],

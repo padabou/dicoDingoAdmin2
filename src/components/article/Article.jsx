@@ -35,6 +35,7 @@ const Article = () => {
   const [createdAt, setCreatedAt] = useState("");
   const [myTags, setMyTag] = useState(new Map());
   const [publicUrl, setPublicUrl] = useState("");
+  const [editorKey, setEditorKey] = useState(0);
 
   useEffect(() => {
     ArticleService.getById(id).then(
@@ -79,6 +80,7 @@ const Article = () => {
       myTags.set(tag.id, true);
     });
     setMyTag(myTags);
+    setEditorKey(prev => prev + 1)
   }
 
   const schema = z.object({
@@ -480,6 +482,7 @@ const Article = () => {
           <div className="col-auto">
             <label htmlFor="intro">Intro</label>
             <RichTextArea
+                key={editorKey}
                 content={intro}
                 name="intro"
                 onChange={(value) => setIntro(value)}
@@ -518,6 +521,7 @@ const Article = () => {
                 </div>
                 <div className="row">
                   <RichTextArea
+                      key={editorKey}
                       content={contentElt?.text}
                       name={`content[${index}].text`}
                       onChange={(value) => changeAttributeVal(value, [index], "text")}
@@ -587,6 +591,7 @@ const Article = () => {
                             </div>
                             <div className="row m-3">
                               <RichTextArea
+                                  key={editorKey}
                                   content={subElt.text}
                                   name={`content[${index}].subContent[${subIndex}].text`}
                                   onChange={(value) =>
@@ -662,6 +667,7 @@ const Article = () => {
                                             />
                                           </div>
                                           <RichTextArea
+                                              key={editorKey}
                                               content={subSubElt.text}
                                               name={`content[${index}].subContent[${subIndex}].subContent[${subSubIndex}].text`}
                                               onChange={(value) =>
