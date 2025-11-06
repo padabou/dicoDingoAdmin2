@@ -7,6 +7,7 @@ const Sitemap = () => {
   const { id } = useParams();
 
   const [loc, setLoc] = useState("");
+  const [type, setType] = useState("");
   const [articleId, setArticleId] = useState("");
   const [updateDate, setUpdateDate] = useState(new Date());
   const [enabled, setEnabled] = useState(false);
@@ -21,6 +22,7 @@ const Sitemap = () => {
           setUpdateDate(res?.data?.lastmod);
           setLoc(res?.data?.loc);
           setEnabled(res?.data?.enabled);
+          setType(res?.data?.type);
         }
       });
     }
@@ -39,6 +41,9 @@ const Sitemap = () => {
   };
   const onChangeArticleId = (e) => {
     setArticleId(e.target.value);
+  };
+  const onChangeType = (e) => {
+    setType(e.target.value);
   };
 
   const [state, formAction] = useActionState(handleCreate, {});
@@ -88,7 +93,7 @@ const Sitemap = () => {
         <div className="row m-3">
 
           <div className="col-auto">
-            <label htmlFor="label">Loc</label>
+            <label htmlFor="loc">Loc</label>
             <input
                 type="text"
                 className="form-control"
@@ -98,13 +103,23 @@ const Sitemap = () => {
             />
           </div>
           <div className="col-auto">
-            <label htmlFor="lang">ArticleId</label>
+            <label htmlFor="articleId">ArticleId</label>
             <input
                 type="text"
                 className="form-control"
                 name="articleId"
                 value={articleId}
                 onChange={onChangeArticleId}
+            />
+          </div>
+          <div className="col-auto">
+            <label htmlFor="type">Type</label>
+            <input
+                type="text"
+                className="form-control"
+                name="Type"
+                value={type}
+                onChange={onChangeType}
             />
           </div>
 

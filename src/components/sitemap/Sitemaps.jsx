@@ -126,6 +126,7 @@ const Sitemaps = () => {
 
         const TABLE_HEAD = [
             {id: 'loc', label: 'loc', alignRight: false},
+            {id: 'type', label: 'type', alignRight: false},
             {id: 'enabled', label: 'enabled', alignRight: false},
             {id: ''},
         ];
@@ -169,7 +170,7 @@ const Sitemaps = () => {
     }, [filteredItems, filterName]);
 
     const handleDelete = () => {
-        Sitemaps.deleteFrontDiscipline(editId).then(() => {
+        SitemapService.deleteObject(editId).then(() => {
             setList(list.filter(item => item.id !== editId));
         });
         setOpen(false);
@@ -211,7 +212,7 @@ const Sitemaps = () => {
                               />
                               <TableBody>
                                   {filteredItems.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                                      const { id, loc, enabled } = row;
+                                      const { id, type, loc, enabled } = row;
                                       const selectedUser = selected.indexOf(loc) !== -1;
 
                                       return (
@@ -224,6 +225,11 @@ const Sitemaps = () => {
                                                       <Typography variant="subtitle2" noWrap>
                                                           {loc}
                                                       </Typography>
+                                              </TableCell>
+                                              <TableCell component="th" scope="row" padding="none">
+                                                  <Typography variant="subtitle2" noWrap>
+                                                      {type}
+                                                  </Typography>
                                               </TableCell>
                                               <TableCell align="left">{enabled ? 'TRUE' : 'FALSE'}</TableCell>
 
