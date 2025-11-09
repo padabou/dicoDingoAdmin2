@@ -17,6 +17,7 @@ const Article = () => {
   const [enabled, setEnabled] = useState(false);
   const [sitemapEnable, setSitemapEnable] = useState(false);
   const [refreshContent, setRefreshContent] = useState(false);
+  const [refreshMainPicture, setRefreshMainPicture] = useState(false);
   const [content, setContent] = useState([]);
   const [metaDescription, setMetaDescription] = useState("");
   const [pictureAlt, setPictureAlt] = useState("");
@@ -73,6 +74,7 @@ const Article = () => {
     setEnabled(response.data?.enabled || false);
     setSitemapEnable(response.data?.sitemapEnable || false);
     setRefreshContent(response.data?.refreshContent || false);
+    setRefreshMainPicture(response.data?.refreshMainPicture || false);
     setPictureLink(response.data?.picture || "");
     setCreatedAt(response.data?.createdAt || "");
     setPublicUrl(response.data?.url || "");
@@ -120,6 +122,10 @@ const Article = () => {
 
   const onChangeRefreshContent = (e) => {
     setRefreshContent(!refreshContent);
+  };
+
+  const onChangeRefreshMainPicture = (e) => {
+    setRefreshMainPicture(!refreshMainPicture);
   };
 
   const onChangeSitemapEnable = (e) => {
@@ -452,6 +458,13 @@ const Article = () => {
               <input className="form-check-input" type="checkbox" id="refreshContent" name="refreshContent" checked={refreshContent}
                      onChange={(e) => onChangeRefreshContent(e)}/>
               <label className="form-check-label" htmlFor="refreshContent">Refresh Content from IA</label>
+            </div>
+          </div>
+          <div className="col-auto">
+            <div className="form-check form-switch m-3">
+              <input className="form-check-input" type="checkbox" id="refreshMainPicture" name="refreshMainPicture" checked={refreshMainPicture}
+                     onChange={(e) => onChangeRefreshMainPicture(e)}/>
+              <label className="form-check-label" htmlFor="refreshMainPicture">Refresh Main Picture from IA</label>
             </div>
           </div>
         </div>

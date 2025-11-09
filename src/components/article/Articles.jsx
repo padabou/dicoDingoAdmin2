@@ -17,7 +17,7 @@ import {
     Container,
     Typography,
     TableContainer,
-    TablePagination, IconButton, Dialog, Select, Box, FormControl, InputLabel,
+    TablePagination, IconButton, Dialog, Select, Box, FormControl, InputLabel, Snackbar,
 } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -47,6 +47,8 @@ const Articles = () => {
         const [rowsPerPage, setRowsPerPage] = useState(25);
         const [filteredItems, setFilteredItems] = useState([]);
         const [isNotFound, setIsNotFound] = useState(false);
+        const [snackbarOpen, setSnackbarOpen] = useState(false);
+        const [snackbarMessage, setSnackbarMessage] = useState("");
 
         const customBaseName = import.meta.env.VITE_APP_BASENAME ? '/' + import.meta.env.VITE_APP_BASENAME : '';
 
@@ -247,6 +249,7 @@ const Articles = () => {
         {id: 'enabled', label: 'Enabled', alignRight: false},
         {id: 'sitemapEnable', label: 'In SteMp', alignRight: false},
         {id: 'refreshContent', label: 'IA Refresh', alignRight: false},
+        {id: 'refreshMainPicture', label: 'Picture Refresh', alignRight: false},
         {id: 'picture', label: 'Picture', alignRight: false},
         {id: 'createdAt', label: 'Updte Date', alignRight: false},
         {id: ''},
@@ -303,29 +306,132 @@ const Articles = () => {
 
     const toggleEnable = (id) => {
         setFilteredItems((prev) =>
-            prev.map((item) => item.id === id ? { ...item, enabled: !item.enabled } : item));
+            prev.map((item) => {
+                if (item.id === id) {
+                    const formData = new FormData();
+                    formData.append("enabled", !item.enabled);
+                    ArticleService.updatePartially(id, formData).then(
+                        (response) => {
+                            setSnackbarOpen(true);
+                            setSnackbarMessage("Article " + id + " a été modifié : enable = " + response.data.enabled)
+
+                        },
+                        (error) => {
+                            console.error("Article " + id + " n'a pas été modifié", error);
+                        }
+                    );
+                    return {...item, enabled: !item.enabled}
+                } else {
+                   // console.log("item non trouvé : " + id);
+                    return item;
+                }
+            }));
     };
 
     const toggleSitemapEnable = (id) => {
         setFilteredItems((prev) =>
-            prev.map((item) => item.id === id ? { ...item, sitemapEnable: !item.sitemapEnable } : item));
+            prev.map((item) => {
+                if (item.id === id) {
+                    const formData = new FormData();
+                    formData.append("sitemapEnable", !item.sitemapEnable);
+                    ArticleService.updatePartially(id, formData).then(
+                        (response) => {
+                            setSnackbarOpen(true);
+                            setSnackbarMessage("Article " + id + " a été modifié : sitemapEnable = " + response.data.sitemapEnable)
+                        },
+                        (error) => {
+                            console.error("Article " + id + " n'a pas été modifié", error);
+                        }
+                    );
+                    return {...item, sitemapEnable: !item.sitemapEnable}
+                } else {
+                    // console.log("item non trouvé : " + id);
+                    return item;
+                }
+            }));
     };
 
     const toggleRefreshContent = (id) => {
         setFilteredItems((prev) =>
-            prev.map((item) => item.id === id ? { ...item, refreshContent: !item.refreshContent } : item));
+            prev.map((item) => {
+                if (item.id === id) {
+                    const formData = new FormData();
+                    formData.append("refreshContent", !item.refreshContent);
+                    ArticleService.updatePartially(id, formData).then(
+                        (response) => {
+                            setSnackbarOpen(true);
+                            setSnackbarMessage("Article " + id + " a été modifié : refreshContent = " + response.data.refreshContent)
+                        },
+                        (error) => {
+                            console.error("Article " + id + " n'a pas été modifié", error);
+                        }
+                    );
+                    return {...item, refreshContent: !item.refreshContent}
+                } else {
+                    // console.log("item non trouvé : " + id);
+                    return item;
+                }
+            }));
     };
 
     const toggleRefreshMainPicture = (id) => {
         setFilteredItems((prev) =>
-            prev.map((item) => item.id === id ? { ...item, refreshMainPicture: !item.refreshMainPicture } : item));
+            prev.map((item) => {
+                if (item.id === id) {
+                    const formData = new FormData();
+                    formData.append("refreshMainPicture", !item.refreshMainPicture);
+                    ArticleService.updatePartially(id, formData).then(
+                        (response) => {
+                            setSnackbarOpen(true);
+                            setSnackbarMessage("Article " + id + " a été modifié : refreshMainPicture = " + response.data.refreshMainPicture)
+                        },
+                        (error) => {
+                            console.error("Article " + id + " n'a pas été modifié", error);
+                        }
+                    );
+                    return {...item, refreshMainPicture: !item.refreshMainPicture}
+                } else {
+                    // console.log("item non trouvé : " + id);
+                    return item;
+                }
+            }));
     };
+
+    const handleClose = (
+        event,reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackbarOpen(false);
+    };
+
+    const action = (
+        <React.Fragment>
+
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleClose}
+            >
+                <Iconify icon={'fluent-color:dismiss-circle-20'} sx={{mr: 2}} title={'Close'}/>
+            </IconButton>
+        </React.Fragment>
+    );
 
   return (
       <>
           <title> Articles </title>
 
-          <Container>
+          <Snackbar
+              open={snackbarOpen}
+              autoHideDuration={6000}
+              onClose={handleClose}
+              message={snackbarMessage}
+              action={action}
+          />
+          <Container maxWidth="xl">
               <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                   <Typography variant="h4" gutterBottom>
                       Articles
