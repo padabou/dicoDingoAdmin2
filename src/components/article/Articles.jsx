@@ -265,28 +265,6 @@ const Articles = () => {
         navigate("/article/createByList");
     };
 
-
-    const handleUpdate = (e, id, field, value) => {
-        console.log({ id, field, value });
-        console.log(e);
-        e = value;
-       // e.target.value = value;
-        /*
-        const formData = new FormData();
-        formData.append(field, value);
-
-        ArticleService.updatePartially(id, formData).then(
-            (response) => {
-                console.log("Article " + id + " a été modifié");
-                console.log(e.value);
-            },
-            (error) => {
-                console.error("Article " + id + " n'a pas été modifié", error);
-            }
-        );
-        */
-    }
-
     useEffect(() => {
         setFilteredItems(applySortFilter(list, order === 'desc'
             ? (a, b) => descendingComparator(a, b, orderBy)

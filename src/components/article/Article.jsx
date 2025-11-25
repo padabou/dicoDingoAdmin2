@@ -5,6 +5,8 @@ import ArticleService from "../../services/article.service";
 import Iconify from "../../designComponents/iconify";
 import {z} from "zod";
 import {SitemapDate} from "../../designComponents/sitemap-date/index.js";
+import {Box, Button} from "@mui/material";
+import VisuallyHiddenInput from "../../designComponents/material/index.js";
 
 const Article = () => {
 
@@ -37,6 +39,7 @@ const Article = () => {
   const [myTags, setMyTag] = useState(new Map());
   const [publicUrl, setPublicUrl] = useState("");
   const [editorKey, setEditorKey] = useState(0);
+  const [preview, setPreview] = useState(null);
 
   useEffect(() => {
     ArticleService.getById(id).then(
@@ -106,6 +109,19 @@ const Article = () => {
 
   const onChangePictureAlt = (e) => {
     setPictureAlt(e.target.value);
+  };
+
+  const onChangePicture = (e) => {
+    setPicture(e.target.files[0]);
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Lecture du fichier pour afficher la preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const onChangeMetaDescription = (e) => {
@@ -405,15 +421,37 @@ const Article = () => {
         <div className="row m-3">
           <h2>Image principale</h2>
           <div className={'col-auto'}>
-            <input
-                className="button-blog"
-                type="file"
-                name="pictureFile"
-                onChange={(e) => {
-                  setPicture(e.target.files[0]);
-                }}
-                accept=".jpeg, .JPEG, .jpg, .JPG, .png, .PNG, .webp, .WEBP, .svg, .SVG, .heif, .HEIF, .avif, .AVIF"
-            />
+
+            <Button
+                component="label"
+                role={undefined}
+                variant="contained"
+                tabIndex={-1}
+
+            >
+              Upload files
+              <VisuallyHiddenInput
+                  type="file"
+                  name="pictureFile"
+                  onChange={(e) => {
+                    onChangePicture(e);
+                  }}
+                  accept=".jpeg, .JPEG, .jpg, .JPG, .png, .PNG, .webp, .WEBP, .svg, .SVG, .heif, .HEIF, .avif, .AVIF"
+              />
+            </Button>
+            {preview && (
+                <Box
+                    component="img"
+                    src={preview}
+                    alt="Preview"
+                    sx={{
+                      maxWidth: 300,
+                      borderRadius: 2,
+                      border: "1px solid #ccc",
+                      mt: 2
+                    }}
+                />
+            )}
           </div>
           <div className={'col-auto'}>
             <input

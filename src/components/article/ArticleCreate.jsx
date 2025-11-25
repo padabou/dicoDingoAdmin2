@@ -7,6 +7,8 @@ import {SitemapDate} from "../../designComponents/sitemap-date/index.js";
 import {z} from "zod";
 import typeService from "../../services/type.service.js";
 import EventBus from "../../common/EventBus.js";
+import {Box, Button} from "@mui/material";
+import VisuallyHiddenInput from "../../designComponents/material/index.js";
 
 const ArticleCreate = () => {
 
@@ -35,6 +37,7 @@ const ArticleCreate = () => {
   const [picture, setPicture] = useState();
   const [pictureLink, setPictureLink] = useState("");
   const [myTags, setMyTag] = useState(new Map());
+  const [preview, setPreview] = useState(null);
 
   useEffect(() => {
 
@@ -111,6 +114,19 @@ const ArticleCreate = () => {
 
   const onChangePictureAlt = (e) => {
     setPictureAlt(e.target.value);
+  };
+
+  const onChangePicture = (e) => {
+    setPicture(e.target.files[0]);
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Lecture du fichier pour afficher la preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const onChangeMetaDescription = (e) => {
@@ -395,15 +411,25 @@ const ArticleCreate = () => {
         <div className="row m-3">
           <h2>Image principale</h2>
           <div className={'col-auto'}>
-            <input
-                className="button-blog"
-                type="file"
-                onChange={(e) => {
-                  setPicture(e.target.files[0]);
-                }}
-                accept=".jpeg, .JPEG, .jpg, .JPG, .png, .PNG, .webp, .WEBP, .svg, .SVG, .heif, .HEIF, .avif, .AVIF"
-            />
+            <Button
+                component="label"
+                role={undefined}
+                variant="contained"
+                tabIndex={-1}
+
+            >
+              Upload files
+              <VisuallyHiddenInput
+                  type="file"
+                  name="pictureFile"
+                  onChange={(e) => {
+                    onChangePicture(e);
+                  }}
+                  accept=".jpeg, .JPEG, .jpg, .JPG, .png, .PNG, .webp, .WEBP, .svg, .SVG, .heif, .HEIF, .avif, .AVIF"
+              />
+            </Button>
           </div>
+
           <div className={'col-auto'}>
             <input
                 type="text"
@@ -424,6 +450,19 @@ const ArticleCreate = () => {
                 placeholder={'Titre de l\'image'}
             />
           </div>
+          {preview && (
+              <Box
+                  component="img"
+                  src={preview}
+                  alt="Preview"
+                  sx={{
+                    maxWidth: 300,
+                    borderRadius: 2,
+                    border: "1px solid #ccc",
+                    mt: 2
+                  }}
+              />
+          )}
         </div>
         <div className="row m-2">
           <div className="col-auto">
