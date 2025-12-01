@@ -39,7 +39,7 @@ const Login = () => {
           localStorage.setItem('userUsername', response.data?.username);
           //localStorage.setItem('userEmail', response.data?.email);
           localStorage.setItem('userType', response.data?.type);
-          navigate("/profile");
+          navigate("/home");
           window.location.reload();
       },
       (error) => {

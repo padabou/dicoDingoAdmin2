@@ -1,3 +1,5 @@
+'use strict';
+
 // @mui
 import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
@@ -60,6 +62,9 @@ export default function AppWidgetSummary({ title, total, icon, color = 'primary'
 
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         {title}
+      </Typography>
+        <Typography variant="subtitle2" sx={{ opacity: 0.92 }}>
+        {total}
       </Typography>
     </CardActionArea>
     </Card>
