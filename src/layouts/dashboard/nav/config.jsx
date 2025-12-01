@@ -13,6 +13,11 @@ const icon = (name) => (
 );
 const navConfig = [
 
+    {
+        title: 'Home',
+        path: '/home',
+        icon: icon('ic_lock'),
+    },
   {
     title: 'Articles',
     path: '/articles',
