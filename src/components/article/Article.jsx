@@ -1,12 +1,15 @@
-import React, {useActionState, useEffect, useState} from "react";
+import React, {useActionState, useEffect, useRef, useState} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import {RichTextArea} from "../../designComponents/rich-text-area";
 import ArticleService from "../../services/article.service";
 import Iconify from "../../designComponents/iconify";
 import {z} from "zod";
 import {SitemapDate} from "../../designComponents/sitemap-date/index.js";
-import {Box, Button} from "@mui/material";
+import {Box, Button, Fade} from "@mui/material";
 import VisuallyHiddenInput from "../../designComponents/material/index.js";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+
 
 const Article = () => {
 
@@ -58,6 +61,15 @@ const Article = () => {
       }
     }); */
   }, [id]);
+
+  const scrollToBottom = () => {
+    window.scrollTo(0, 999999); // Sans smooth pour tester
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo(0, 0); // Sans smooth pour tester
+  };
+
 
   const fillSubmit = (response) => {
     setTitle(response.data?.title || "");
@@ -132,11 +144,11 @@ const Article = () => {
     setDateToSitemap(e);
   };
 
-  const onChangeEnabled = (e) => {
+  const onChangeEnabled = () => {
     setEnabled(!enabled);
   };
 
-  const onChangeRefreshContent = (e) => {
+  const onChangeRefreshContent = () => {
     setRefreshContent(!refreshContent);
   };
 
@@ -333,6 +345,57 @@ const Article = () => {
       <title> {`Front page ${title} | Edition`} </title>
       <h1>{type} - {title}</h1>
       <p>Updated Date : {createdAt}</p>
+      <Box
+          sx={{
+            position: "fixed",
+            bottom: 20,
+            right: 20,
+            zIndex: 100
+          }}
+      >
+        <Fade in timeout={500} sx={{mx: 3}}>
+          <Button
+              variant="contained"
+              color="primary"
+              onClick={scrollToBottom}
+              startIcon={<KeyboardArrowDownIcon />}
+              sx={{
+                borderRadius: 8,
+                px: 3,
+                py: 1.5,
+                boxShadow: 3,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(2px)',
+                  boxShadow: 6,
+                }
+              }}
+          >
+            Aller en bas
+          </Button>
+        </Fade>
+        <Fade in timeout={500} sx={{mx: 3}}>
+          <Button
+              variant="contained"
+              color="primary"
+              onClick={scrollToTop}
+              startIcon={<KeyboardArrowUpIcon />}
+              sx={{
+                borderRadius: 8,
+                px: 3,
+                py: 1.5,
+                boxShadow: 3,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(2px)',
+                  boxShadow: 6,
+                }
+              }}
+          >
+            Aller en haut
+          </Button>
+        </Fade>
+      </Box>
       <form action={formAction}>
         <div className="form-group m-3">
           <button className="btn btn-primary btn-block mx-2" disabled={loading} type="submit">
