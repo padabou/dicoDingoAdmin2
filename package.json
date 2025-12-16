@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@faker-js/faker": "^9.6.0",
     "@iconify/react": "^6.0.2",
     "@mui/icons-material": "^7.3.6",
