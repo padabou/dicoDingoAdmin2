@@ -1,7 +1,7 @@
 import React from 'react'
 import {createRoot} from 'react-dom/client'
 import './index.css'
-import {BrowserRouter, Route, Routes} from "react-router";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DashboardLayout from "./layouts/dashboard/index.js";
 import Home from "./components/Home.jsx";
 import ArticleCreate from "./components/article/ArticleCreate.jsx";
