@@ -18,7 +18,7 @@
     "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.0.1",
     "@mui/x-date-pickers": "^7.28.0",
-    "axios": "^1.8.4",
+    "axios": "^1.13.2",
     "bootstrap": "^5.3.3",
     "change-case": "^5.4.4",
     "date-fns": "^4.1.0",
