@@ -32,7 +32,7 @@
     "react-router-dom": "^7.4.0",
     "simplebar-react": "^3.3.2",
     "suneditor-react": "^3.6.1",
-    "zod": "^4.2.1"
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
