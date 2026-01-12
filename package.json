@@ -16,7 +16,7 @@
     "@faker-js/faker": "^10.2.0",
     "@iconify/react": "^6.0.2",
     "@mui/icons-material": "^7.3.6",
-    "@mui/material": "^7.0.1",
+    "@mui/material": "^7.3.7",
     "@mui/x-date-pickers": "^8.23.0",
     "axios": "^1.13.2",
     "bootstrap": "^5.3.8",
