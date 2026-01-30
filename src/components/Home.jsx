@@ -35,19 +35,22 @@ const Home = () => {
           </Typography>
 
           <Grid container spacing={3}>
-              <Grid item xs={12} sm={6} md={3}>
-                  <AppWidgetSummary total={data?.articleCount} title="Total Articles" icon={'ant-design:android-filled'} />
-              </Grid>
-              <Grid item xs={12} sm={6} md={3}>
-                  <AppWidgetSummary total={data?.notEnabledCount} title="Articles not Enabled" color="success" icon={'ant-design:android-filled'} />
-              </Grid>
-              <Grid item xs={12} sm={6} md={3}>
-                  <AppWidgetSummary total={data?.refreshByIaCount} title="Refresh By IA" color="warning" icon={'ant-design:android-filled'} />
-              </Grid>
-              <Grid item xs={12} sm={6} md={3}>
-                  <AppWidgetSummary total={data?.refreshPictureByIaCount} title="Refresh Picture" color="error" icon={'ant-design:android-filled'} />
-              </Grid>
 
+              <Grid item xs={12} sm={6} md={3}>
+                  <AppWidgetSummary total={data?.articleCount} title="Total Articles" icon={'ant-design:check-circle-filled'} />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                  <AppWidgetSummary total={data?.notEnabledCount} title="Articles not Enabled" color="success" icon={'ic:round-disabled-by-default'} />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                  <AppWidgetSummary total={data?.refreshByIaCount} title="Refresh By IA" color="warning" icon={'arcticons:openai-chatgpt'} />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                  <AppWidgetSummary total={data?.refreshPictureByIaCount} title="Refresh Picture" color="error" icon={'qlementine-icons:picture-16'} />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                  <AppWidgetSummary total={data?.contactMessagesCount} title="New Messages" color="info" icon={'ant-design:message-filled'} />
+              </Grid>
           </Grid>
       </Container>
   );
