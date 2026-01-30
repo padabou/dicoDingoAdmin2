@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
-import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment } from '@mui/material';
+import {Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment, TablePagination} from '@mui/material';
 import Iconify from "../../designComponents/iconify";
 // component
 
@@ -32,14 +32,18 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-
-
-export const ArrayListToolbar = ({ numSelected, filterName, onFilterName }) => {
+export const ArrayListToolbar = ({ numSelected, filterName, onFilterName, count, rowsPerPage, page, onPageChange, onRowsPerPageChange }) => {
   ArrayListToolbar.propTypes = {
     numSelected: PropTypes.number,
+    count: PropTypes.number,
     filterName: PropTypes.string,
     onFilterName: PropTypes.func,
+    onPageChange: PropTypes.func,
+    onRowsPerPageChange: PropTypes.func,
+    rowsPerPage: PropTypes.number,
+    page: PropTypes.number,
   };
+
   return (
     <StyledRoot
       sx={{
@@ -73,12 +77,16 @@ export const ArrayListToolbar = ({ numSelected, filterName, onFilterName }) => {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Iconify icon="ic:round-filter-list" />
-          </IconButton>
-        </Tooltip>
+        <TablePagination
+            rowsPerPageOptions={[25, 50, 100]}
+            component="div"
+            count={count || 0}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={onPageChange}
+            onRowsPerPageChange={onRowsPerPageChange}
+        />
       )}
     </StyledRoot>
   );
-}
+};
