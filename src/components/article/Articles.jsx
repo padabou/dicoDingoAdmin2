@@ -36,7 +36,8 @@ const Articles = () => {
         const currentQuery = searchParams.get('query') || '';
         const currentPage = searchParams.get('page') || '0';
 
-        ArticleService.getAll(currentType, "FR", currentSitemap, currentEnabled, currentQuery, currentPage).then(
+        // The API call should not handle client-side pagination
+        ArticleService.getAll(currentType, "FR", currentSitemap, currentEnabled, currentQuery).then(
             (response) => {
                 setList(response.data);
             },
@@ -73,34 +74,40 @@ const Articles = () => {
         );
     }, []);
 
-    const handleFilterChange = (key, value) => {
-        const params = new URLSearchParams(searchParams);
-        if (value) {
-            params.set(key, value);
-        } else {
-            params.delete(key);
-        }
-        setSearchParams(params);
-    };
-
     const onChangeType = (e) => {
         const newType = e.target.value;
         setType(newType);
-        setPage(0); // Reset page on type change
-        handleFilterChange('type', newType);
-        handleFilterChange('page', '0');
+        setPage(0);
+
+        const newSearchParams = new URLSearchParams(searchParams);
+        if (newType) {
+            newSearchParams.set('type', newType);
+        } else {
+            newSearchParams.delete('type');
+        }
+        newSearchParams.set('page', '0');
+        setSearchParams(newSearchParams);
     };
 
     const onFilterNameChange = (value) => {
         setFilterName(value);
-        setPage(0); // Reset page on filter change
-        handleFilterChange('query', value);
-        handleFilterChange('page', '0');
+        setPage(0);
+
+        const newSearchParams = new URLSearchParams(searchParams);
+        if (value) {
+            newSearchParams.set('query', value);
+        } else {
+            newSearchParams.delete('query');
+        }
+        newSearchParams.set('page', '0');
+        setSearchParams(newSearchParams);
     };
 
     const onPageChange = (event, newPage) => {
         setPage(newPage);
-        handleFilterChange('page', newPage.toString());
+        const newSearchParams = new URLSearchParams(searchParams);
+        newSearchParams.set('page', newPage.toString());
+        setSearchParams(newSearchParams);
     };
 
     const createArticle = () => {
