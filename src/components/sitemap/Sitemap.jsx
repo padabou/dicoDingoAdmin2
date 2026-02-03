@@ -33,7 +33,7 @@ const Sitemap = () => {
     setUpdateDate(e);
   };
 
-  const onChangeEnabled = (e) => {
+  const onChangeEnabled = () => {
     setEnabled(!enabled);
   };
   const onChangeLoc = (e) => {
@@ -55,6 +55,7 @@ const Sitemap = () => {
     try {
       formData.append("lastmod", updateDate.format('YYYY-MM-DD'));
     } catch (e) {
+      console.log(e);
       formData.append("lastmod", updateDate);
     }
 
@@ -71,7 +72,7 @@ const Sitemap = () => {
       );
     } else {
       SitemapService.update(id, formData).then(
-          (response) => {
+          () => {
             setLoading(false);
             setMessage("Sitemap " + loc + " a été modifié");
           },
@@ -139,7 +140,7 @@ const Sitemap = () => {
             {loading && (
                 <span className="spinner-border spinner-border-sm"></span>
             )}
-            <span>Créer</span>
+            <span>{id ? 'Modifier' : 'Créer' }</span>
           </button>
         </div>
         </div>

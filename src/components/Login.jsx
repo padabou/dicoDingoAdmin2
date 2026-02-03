@@ -5,16 +5,30 @@ import AuthService from "../services/auth.service";
 import UserService from "../services/user.service";
 import {useFormStatus} from "react-dom";
 import {z} from "zod";
-import {Button, Input} from "@mui/material";
+import {Button, IconButton, Input, Snackbar} from "@mui/material";
+import Iconify from "../designComponents/iconify/index.js";
 
 const Login = () => {
   let navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [authDone, setAuthDone] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
+
+    const snackbarAction = (
+        <IconButton size="small" aria-label="close" color="inherit" onClick={handleCloseSnackbar}>
+            <Iconify icon={'fluent-color:dismiss-circle-20'} sx={{mr: 2}} title={'Close'}/>
+        </IconButton>
+    );
 
   // Schéma de validation avec Zod
   const schema = z.object({
@@ -50,7 +64,8 @@ const Login = () => {
           error.message ||
           error.toString();
 
-        setMessage(resMessage);
+          setSnackbarMessage(`Login error : ${resMessage}.`);
+          setSnackbarOpen(true);
       })
     }
   },[authDone, navigate])
@@ -81,8 +96,8 @@ const Login = () => {
               error.message ||
               error.toString();
 
-          setLoading(false);
-          setMessage(resMessage);
+            setSnackbarMessage(`Login error : ${resMessage}.`);
+            setSnackbarOpen(true);
         }
     );
 
@@ -137,6 +152,13 @@ const Login = () => {
           </Button>
         </form>
       </div>
+        <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            message={snackbarMessage}
+            action={snackbarAction}
+        />
     </div>
   );
 };

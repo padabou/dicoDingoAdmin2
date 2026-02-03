@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
 
 // ----------------------------------------------------------------------
-
-
-
 export const ArrayListHead = ({
   order,
   orderBy,
@@ -28,15 +25,6 @@ export const ArrayListHead = ({
     clip: 'rect(0 0 0 0)',
   };
 
-  ArrayListHead.propTypes = {
-    order: PropTypes.oneOf(['asc', 'desc']),
-    orderBy: PropTypes.string,
-    rowCount: PropTypes.number,
-    headLabel: PropTypes.array,
-    numSelected: PropTypes.number,
-    onRequestSort: PropTypes.func,
-    onSelectAllClick: PropTypes.func,
-  };
 
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -74,4 +62,14 @@ export const ArrayListHead = ({
       </TableRow>
     </TableHead>
   );
-}
+};
+
+ArrayListHead.propTypes = {
+  order: PropTypes.oneOf(['asc', 'desc']),
+  orderBy: PropTypes.string,
+  rowCount: PropTypes.number,
+  headLabel: PropTypes.array,
+  numSelected: PropTypes.number,
+  onRequestSort: PropTypes.func,
+  onSelectAllClick: PropTypes.func,
+};

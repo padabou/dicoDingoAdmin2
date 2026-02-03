@@ -1,12 +1,20 @@
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {useNavigate} from "react-router-dom";
+import {setupAxiosInterceptors} from "./utils/axiosInterceptor.jsx";
 
 function App() {
   const [count, setCount] = useState(0)
+    const navigate = useNavigate();
 
+    // We use useEffect here with an empty dependency array to ensure
+    // this runs only once when the App component mounts.
+    useEffect(() => {
+        setupAxiosInterceptors(navigate);
+    }, [navigate]);
   return (
     <>
       <div>

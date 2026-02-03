@@ -16,7 +16,6 @@ const EditUser = () => {
   const [username, setUsername] = useState(location.state.username);
   const [roles, setRoles] = useState([...location.state.roles]);
   const [listRole, setListRole] = useState([]);
-  const [loading, setLoading] = useState("");
   const [message, setMessage] = useState("");
 
   const onChangeFirstName = (e) => {
@@ -67,17 +66,14 @@ const EditUser = () => {
     };
 
     setMessage("");
-    setLoading(true);
     form.current.validateAll();
 
     if (checkBtn.current.context._errors.length === 0) {
       if(roles != null){
         UserService.updateUser(data);
       }
-      setLoading(false);
       setMessage("Done");
     } else {
-      setLoading(false);
     }
   };
 

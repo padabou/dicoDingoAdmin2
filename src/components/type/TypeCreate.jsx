@@ -1,5 +1,5 @@
 import React, {useActionState, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import TypeService from "../../services/type.service";
 import {Button} from "@mui/material";
 import {RichTextArea} from "../../designComponents/rich-text-area/index.js";
@@ -7,9 +7,7 @@ import {RichTextArea} from "../../designComponents/rich-text-area/index.js";
 
 const TypeCreate = () => {
 
-  const { id } = useParams();
-
-  const [title, setTitle] = useState("");
+  const [title] = useState("");
   const [type, setType] = useState("");
   const [enabled, setEnabled] = useState(false);
   const [metaDescription, setMetaDescription] = useState("");
@@ -33,7 +31,7 @@ const TypeCreate = () => {
     setMetaDescription(e.target.value);
   };
 
-  const onChangeEnabled = (e) => {
+  const onChangeEnabled = () => {
     setEnabled(!enabled);
   };
 

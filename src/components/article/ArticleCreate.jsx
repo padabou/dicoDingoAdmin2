@@ -33,10 +33,10 @@ const ArticleCreate = () => {
   const [conclusion, setConclusion] = useState("");
   const [loading, setLoading] = useState("");
   const [message, setMessage] = useState("");
-  const [tags, setTags] = useState([]);
+  const [tags] = useState([]);
   const [picture, setPicture] = useState();
   const [pictureLink, setPictureLink] = useState("");
-  const [myTags, setMyTag] = useState(new Map());
+  const [myTags] = useState(new Map());
   const [preview, setPreview] = useState(null);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const ArticleCreate = () => {
     setDateToSitemap(e);
   };
 
-  const onChangeEnabled = (e) => {
+  const onChangeEnabled = () => {
     setEnabled(!enabled);
   };
 
@@ -152,7 +152,7 @@ const ArticleCreate = () => {
 
   const addRecursif = (contentArray, tabPos) => {
     if (tabPos.length === 1) {
-      let result = contentArray.map((elt, index) => {
+      let result = contentArray?.map((elt, index) => {
         if (index === tabPos[0]) {
           return {
             ...elt,
@@ -170,7 +170,7 @@ const ArticleCreate = () => {
 
     const pos = tabPos.shift();
 
-    return contentArray.map((elt, index) => {
+    return contentArray?.map((elt, index) => {
       if (index === pos) {
         return { ...elt, subContent: addRecursif(elt.subContent, tabPos) };
       }
@@ -180,7 +180,7 @@ const ArticleCreate = () => {
 
   const modifyRecursif = (val, contentArray, tabPos, attribute) => {
     if (tabPos.length === 1) {
-      return contentArray.map((elt, index) => {
+      return contentArray?.map((elt, index) => {
         if (index === tabPos[0]) {
           return {
             ...elt,
@@ -193,7 +193,7 @@ const ArticleCreate = () => {
 
     const pos = tabPos.shift();
 
-    return contentArray.map((elt, index) => {
+    return contentArray?.map((elt, index) => {
       if (index === pos) {
         return {
           ...elt,
@@ -224,7 +224,7 @@ const ArticleCreate = () => {
 
     const pos = tabPos.shift();
 
-    return contentArray.map((elt, index) => {
+    return contentArray?.map((elt, index) => {
       if (index === pos) {
         return { ...elt, subContent: removeRecursif(elt.subContent, tabPos) };
       }
@@ -287,6 +287,7 @@ const ArticleCreate = () => {
     try {
       formData.append("sitemapDateAdd", dateToSitemap.format('YYYY-MM-DD'));
     } catch (e) {
+      console.error(e);
       formData.append("sitemapDateAdd", dateToSitemap);
     }
 

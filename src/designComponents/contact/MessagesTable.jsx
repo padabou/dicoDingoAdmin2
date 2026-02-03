@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useState, useMemo} from "react";
 import {filter} from "lodash";
 import {
     Card,
@@ -42,7 +42,7 @@ const descendingComparator = (a, b, orderBy) => {
 }
 
 const applySortFilter = (array, comparator, query) => {
-    const stabilizedThis = array.map((el, index) => [el, index]);
+    const stabilizedThis = array?.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
         let order = comparator(a[0], b[0]);
         if (order !== 0) return order;
@@ -67,18 +67,16 @@ const MessagesTable = ({ messages, onMessageUpdate, filterName, onFilterName, pa
     const [selected, setSelected] = useState([]);
     const [orderBy, setOrderBy] = useState('createdAt');
     const [rowsPerPage, setRowsPerPage] = useState(25);
-    const [filteredItems, setFilteredItems] = useState([]);
-    const [isNotFound, setIsNotFound] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
 
-    useEffect(() => {
-        const sortedAndFiltered = applySortFilter(messages, order === 'desc'
+    const filteredItems = useMemo(() => {
+        return applySortFilter(messages, order === 'desc'
             ? (a, b) => descendingComparator(a, b, orderBy)
             : (a, b) => -descendingComparator(a, b, orderBy), filterName);
-        setFilteredItems(sortedAndFiltered);
-        setIsNotFound(!sortedAndFiltered.length && !!filterName);
-    }, [messages, filterName, order, orderBy]);
+    }, [messages, order, orderBy, filterName]);
+
+    const isNotFound = !filteredItems.length && !!filterName;
 
     const handleOpenMenu = (event, id, label) => {
         setEditId(id);

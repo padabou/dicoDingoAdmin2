@@ -3,7 +3,7 @@ import authHeader from "./auth-header";
 
 const API_URL = "/admin/type";
 
-const getAll = (type, lang) => {
+const getAll = () => {
   return axiosInstanceSecure.get(`${API_URL}`, { headers: authHeader() });
 };
 

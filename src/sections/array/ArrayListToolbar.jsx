@@ -33,17 +33,6 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export const ArrayListToolbar = ({ numSelected, filterName, onFilterName, count, rowsPerPage, page, onPageChange, onRowsPerPageChange }) => {
-  ArrayListToolbar.propTypes = {
-    numSelected: PropTypes.number,
-    count: PropTypes.number,
-    filterName: PropTypes.string,
-    onFilterName: PropTypes.func,
-    onPageChange: PropTypes.func,
-    onRowsPerPageChange: PropTypes.func,
-    rowsPerPage: PropTypes.number,
-    page: PropTypes.number,
-  };
-
   return (
     <StyledRoot
       sx={{
@@ -89,4 +78,16 @@ export const ArrayListToolbar = ({ numSelected, filterName, onFilterName, count,
       )}
     </StyledRoot>
   );
+};
+
+// Define propTypes outside the component body
+ArrayListToolbar.propTypes = {
+  numSelected: PropTypes.number,
+  count: PropTypes.number,
+  filterName: PropTypes.string,
+  onFilterName: PropTypes.func,
+  onPageChange: PropTypes.func,
+  onRowsPerPageChange: PropTypes.func,
+  rowsPerPage: PropTypes.number,
+  page: PropTypes.number,
 };

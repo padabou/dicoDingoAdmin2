@@ -13,7 +13,7 @@ const ArticleCreateByList = () => {
 
   const [state, formAction] = useActionState(handleCreate, {});
 
-  function handleCreate (prevState, formData)  {
+  function handleCreate ()  {
 
     setMessage("");
     setLoading(true);
@@ -22,7 +22,7 @@ const ArticleCreateByList = () => {
         const articles = {articles : JSON.parse(titleList)}
 
         ArticleService.bulkCreate(articles).then(
-            (response) => {
+            () => {
               setLoading(false);
               setMessage("Les articles ont bien été initialisés");
               },
@@ -32,7 +32,7 @@ const ArticleCreateByList = () => {
             }
         );
       } catch (e) {
-        setMessage("Json invalid, vérifier la synthaxe");
+        setMessage("Json invalid, vérifier la synthaxe - " + e);
       }
   };
 

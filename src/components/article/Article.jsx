@@ -1,5 +1,5 @@
-import React, {useActionState, useEffect, useRef, useState} from "react";
-import {useParams, useNavigate} from "react-router-dom";
+import React, {useActionState, useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 import {RichTextArea} from "../../designComponents/rich-text-area";
 import ArticleService from "../../services/article.service";
 import Iconify from "../../designComponents/iconify";
@@ -44,33 +44,6 @@ const Article = () => {
   const [editorKey, setEditorKey] = useState(0);
   const [preview, setPreview] = useState(null);
 
-  useEffect(() => {
-    ArticleService.getById(id).then(
-      (response) => {
-        if (response?.data) {
-          fillSubmit(response);
-        } else if (id === undefined) {
-          setContent([{ subContent: [] }]);
-        }
-      },
-      (error) => {}
-    );
-   /* BlogService.getAllTags().then((res) => {
-      if (res?.data) {
-        setTags(res.data);
-      }
-    }); */
-  }, [id]);
-
-  const scrollToBottom = () => {
-    window.scrollTo(0, 999999); // Sans smooth pour tester
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo(0, 0); // Sans smooth pour tester
-  };
-
-
   const fillSubmit = (response) => {
     setTitle(response.data?.title || "");
     setType(response.data?.type || "");
@@ -99,6 +72,33 @@ const Article = () => {
     setMyTag(myTags);
     setEditorKey(prev => prev + 1)
   }
+
+  useEffect(() => {
+    ArticleService.getById(id).then(
+      (response) => {
+        if (response?.data) {
+          fillSubmit(response);
+        } else if (id === undefined) {
+          setContent([{ subContent: [] }]);
+        }
+      },
+      (error) => {setMessage("Error " + error)}
+    );
+   /* BlogService.getAllTags().then((res) => {
+      if (res?.data) {
+        setTags(res.data);
+      }
+    }); */
+  }, [id]);
+
+  const scrollToBottom = () => {
+    window.scrollTo(0, 999999); // Sans smooth pour tester
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo(0, 0); // Sans smooth pour tester
+  };
+
 
   const schema = z.object({
     title: z.string().min(1, "Le titre est requis"),
@@ -152,11 +152,11 @@ const Article = () => {
     setRefreshContent(!refreshContent);
   };
 
-  const onChangeRefreshMainPicture = (e) => {
+  const onChangeRefreshMainPicture = () => {
     setRefreshMainPicture(!refreshMainPicture);
   };
 
-  const onChangeSitemapEnable = (e) => {
+  const onChangeSitemapEnable = () => {
     setSitemapEnable(!sitemapEnable);
   };
 
@@ -171,7 +171,7 @@ const Article = () => {
 
   const addRecursif = (contentArray, tabPos) => {
     if (tabPos.length === 1) {
-      let result = contentArray.map((elt, index) => {
+      let result = contentArray?.map((elt, index) => {
         if (index === tabPos[0]) {
           if(!elt.subContent) {
             elt.subContent = [];
@@ -192,7 +192,7 @@ const Article = () => {
 
     const pos = tabPos.shift();
 
-    return contentArray.map((elt, index) => {
+    return contentArray?.map((elt, index) => {
       if (index === pos) {
         return { ...elt, subContent: addRecursif(elt.subContent, tabPos) };
       }
@@ -202,7 +202,7 @@ const Article = () => {
 
   const modifyRecursif = (val, contentArray, tabPos, attribute) => {
     if (tabPos.length === 1) {
-      return contentArray.map((elt, index) => {
+      return contentArray?.map((elt, index) => {
         if (index === tabPos[0]) {
           return {
             ...elt,
@@ -215,7 +215,7 @@ const Article = () => {
 
     const pos = tabPos.shift();
 
-    return contentArray.map((elt, index) => {
+    return contentArray?.map((elt, index) => {
       if (index === pos) {
         return {
           ...elt,
@@ -246,7 +246,7 @@ const Article = () => {
 
     const pos = tabPos.shift();
 
-    return contentArray.map((elt, index) => {
+    return contentArray?.map((elt, index) => {
       if (index === pos) {
         return { ...elt, subContent: removeRecursif(elt.subContent, tabPos) };
       }
@@ -307,6 +307,7 @@ const Article = () => {
     try {
       formData.append("sitemapDateAdd", dateToSitemap.format('YYYY-MM-DD'));
     } catch (e) {
+      console.log(e);
       formData.append("sitemapDateAdd", dateToSitemap);
     }
 
@@ -345,58 +346,65 @@ const Article = () => {
       <title> {`Front page ${title} | Edition`} </title>
       <h1>{type} - {title}</h1>
       <p>Updated Date : {createdAt}</p>
-      <Box
-          sx={{
-            position: "fixed",
-            bottom: 20,
-            right: 20,
-            zIndex: 100
-          }}
-      >
-        <Fade in timeout={500} sx={{mx: 3}}>
-          <Button
-              variant="contained"
-              color="primary"
-              onClick={scrollToBottom}
-              startIcon={<KeyboardArrowDownIcon />}
-              sx={{
-                borderRadius: 8,
-                px: 3,
-                py: 1.5,
-                boxShadow: 3,
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(2px)',
-                  boxShadow: 6,
-                }
-              }}
-          >
-            Aller en bas
-          </Button>
-        </Fade>
-        <Fade in timeout={500} sx={{mx: 3}}>
-          <Button
-              variant="contained"
-              color="primary"
-              onClick={scrollToTop}
-              startIcon={<KeyboardArrowUpIcon />}
-              sx={{
-                borderRadius: 8,
-                px: 3,
-                py: 1.5,
-                boxShadow: 3,
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(2px)',
-                  boxShadow: 6,
-                }
-              }}
-          >
-            Aller en haut
-          </Button>
-        </Fade>
-      </Box>
+      
       <form action={formAction}>
+        <Box
+            sx={{
+              position: "fixed",
+              bottom: 20,
+              right: 20,
+              zIndex: 100
+            }}
+        >
+          <button className="btn btn-primary btn-block mx-2" disabled={loading} type="submit">
+          {loading && (
+              <span className="spinner-border spinner-border-sm"></span>
+          )}
+          <span>Mise à jour</span>
+        </button>
+          <Fade in timeout={500} sx={{mx: 2}}>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={scrollToBottom}
+                startIcon={<KeyboardArrowDownIcon />}
+                sx={{
+                  borderRadius: 8,
+                  px: 3,
+                  py: 1.5,
+                  boxShadow: 3,
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(2px)',
+                    boxShadow: 6,
+                  }
+                }}
+            >
+              Aller en bas
+            </Button>
+          </Fade>
+          <Fade in timeout={500} sx={{mx: 2}}>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={scrollToTop}
+                startIcon={<KeyboardArrowUpIcon />}
+                sx={{
+                  borderRadius: 8,
+                  px: 3,
+                  py: 1.5,
+                  boxShadow: 3,
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(2px)',
+                    boxShadow: 6,
+                  }
+                }}
+            >
+              Aller en haut
+            </Button>
+          </Fade>
+        </Box>
         <div className="form-group m-3">
           <button className="btn btn-primary btn-block mx-2" disabled={loading} type="submit">
             {loading && (

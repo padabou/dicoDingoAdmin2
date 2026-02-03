@@ -36,12 +36,9 @@ const Type = () => {
           setIntro(response.data?.intro || "");
           setEnabled(response.data?.enabled || false);
           setSlug(response.data?.slug || false);
-
-
-        } else if (id === undefined) {
         }
       },
-      (error) => {}
+      (error) => { setMessage("Error during retrieve data : " + error)}
     );
 
   }, [id]);
@@ -66,7 +63,7 @@ const Type = () => {
     setMetaDescription(e.target.value);
   };
 
-  const onChangeEnabled = (e) => {
+  const onChangeEnabled = () => {
     setEnabled(!enabled);
   };
 
@@ -101,7 +98,7 @@ const Type = () => {
       },
           (error) => {
             setLoading(false);
-            setMessage("Il y a eu un problème lors de la mise à jour ...");
+            setMessage("Il y a eu un problème lors de la mise à jour ... " + error);
           }
       );
 

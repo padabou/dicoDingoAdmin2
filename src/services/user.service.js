@@ -25,7 +25,7 @@ const getUserBySearch = (data) => {
   });
 };
 
-const updateUser = (data, roles) => {
+const updateUser = (data) => {
   return axiosInstanceSecure.put(`${API_URL}${data.id}`, data, {
     headers: authHeader(),
   });

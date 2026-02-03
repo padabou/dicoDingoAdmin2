@@ -10,7 +10,7 @@ const CheckAuthProvider = ({ children }) => {
     if (storedUser == null) {
       navigate("/login");
     }
-  }, []);
+  }, [navigate]);
 
   return <>{children}</>;
 };

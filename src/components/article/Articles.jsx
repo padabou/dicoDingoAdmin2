@@ -34,7 +34,6 @@ const Articles = () => {
         const currentSitemap = searchParams.get('sitemapAdded') || '';
         const currentEnabled = searchParams.get('enabled') || '';
         const currentQuery = searchParams.get('query') || '';
-        const currentPage = searchParams.get('page') || '0';
 
         // The API call should not handle client-side pagination
         ArticleService.getAll(currentType, "FR", currentSitemap, currentEnabled, currentQuery).then(

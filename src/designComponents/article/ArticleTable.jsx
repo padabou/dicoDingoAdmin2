@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useState, useMemo} from "react";
 import {filter} from "lodash";
 import {
     Card,
@@ -68,20 +68,18 @@ const ArticleTable = ({ articles, onArticleUpdate, filterName, onFilterName, pag
     const [selected, setSelected] = useState([]);
     const [orderBy, setOrderBy] = useState('name');
     const [rowsPerPage, setRowsPerPage] = useState(25);
-    const [filteredItems, setFilteredItems] = useState([]);
-    const [isNotFound, setIsNotFound] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
 
     const customBaseName = import.meta.env.VITE_APP_BASENAME ? '/' + import.meta.env.VITE_APP_BASENAME : '';
 
-    useEffect(() => {
-        const sortedAndFiltered = applySortFilter(articles, order === 'desc'
+    const filteredItems = useMemo(() => {
+        return applySortFilter(articles, order === 'desc'
             ? (a, b) => descendingComparator(a, b, orderBy)
             : (a, b) => -descendingComparator(a, b, orderBy), filterName);
-        setFilteredItems(sortedAndFiltered);
-        setIsNotFound(!sortedAndFiltered.length && !!filterName);
-    }, [articles, filterName, order, orderBy]);
+    }, [articles, order, orderBy, filterName]);
+
+    const isNotFound = !filteredItems.length && !!filterName;
 
     const handleOpenMenu = (event, id, slug, label) => {
         setEditId(id);
@@ -144,27 +142,23 @@ const ArticleTable = ({ articles, onArticleUpdate, filterName, onFilterName, pag
     };
 
     const createToggleHandler = (field) => (id) => {
-        setFilteredItems((prev) =>
-            prev.map((item) => {
-                if (item.id === id) {
-                    const updatedItem = { ...item, [field]: !item[field] };
-                    const formData = new FormData();
-                    formData.append(field, updatedItem[field]);
-                    ArticleService.updatePartially(id, formData).then(
-                        (response) => {
-                            setSnackbarOpen(true);
-                            setSnackbarMessage(`Article ${id} updated: ${field} = ${response.data[field]}`);
-                            onArticleUpdate(); // Notify parent to refetch
-                        },
-                        (error) => {
-                            console.error(`Article ${id} could not be updated`, error);
-                        }
-                    );
-                    return updatedItem;
+        // We can't directly mutate the state from the parent, so we just call the update handler
+        // The parent will refetch the data and the table will re-render
+        const item = filteredItems.find(item => item.id === id);
+        if (item) {
+            const formData = new FormData();
+            formData.append(field, !item[field]);
+            ArticleService.updatePartially(id, formData).then(
+                (response) => {
+                    setSnackbarOpen(true);
+                    setSnackbarMessage(`Article ${id} updated: ${field} = ${response.data[field]}`);
+                    onArticleUpdate(); // Notify parent to refetch
+                },
+                (error) => {
+                    console.error(`Article ${id} could not be updated`, error);
                 }
-                return item;
-            })
-        );
+            );
+        }
     };
 
     const toggleEnable = createToggleHandler('enabled');

@@ -20,8 +20,6 @@ import BoardModerator from "./components/BoardModerator.jsx";
 import BoardAdmin from "./components/BoardAdmin.jsx";
 import Login from "./components/Login.jsx";
 import ScrollToTop from "./designComponents/scroll-to-top/index.js";
-import {StyledChart} from "./designComponents/chart/index.jsx";
-import {AxiosInterceptor} from "./utils/axiosInterceptor.jsx";
 import CheckAuthProvider from "./components/CheckAuthProvider.jsx";
 import ThemeProvider from "./theme/index.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -31,10 +29,8 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter basename={import.meta.env.VITE_APP_BASENAME}>
         <ThemeProvider>
         <ScrollToTop />
-        <StyledChart />
         <CheckAuthProvider>
-        <AxiosInterceptor>
-                    <Routes>
+            <Routes>
                         <Route path="/" element={<DashboardLayout />}>
                             <Route path="/home" element={<Home />} />
                             <Route path="/article/create" element={<ArticleCreate />} />
@@ -57,7 +53,6 @@ createRoot(document.getElementById('root')).render(
                         </Route>
                         <Route path="/login" element={<Login />} />
                     </Routes>
-        </AxiosInterceptor>
         </CheckAuthProvider>
         </ThemeProvider>
     </BrowserRouter>,

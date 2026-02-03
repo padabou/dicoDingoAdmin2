@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
-import account from "../../../_mock/account";
-import {useNavigate} from "react-router-dom";
 // mocks_
+import account from '../../../_mock/account';
+import {useNavigate} from "react-router-dom";
+import AuthService from "../../../services/auth.service.js";
 
 // ----------------------------------------------------------------------
 
@@ -12,14 +13,17 @@ const MENU_OPTIONS = [
   {
     label: 'Home',
     icon: 'eva:home-fill',
+    path: '/home'
   },
   {
     label: 'Profile',
     icon: 'eva:person-fill',
+    path: '/profile'
   },
   {
     label: 'Settings',
     icon: 'eva:settings-2-fill',
+    path: '/settings'
   },
 ];
 
@@ -28,16 +32,17 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
   const navigate = useNavigate();
-  const [user, setUser] = useState({ username: '', email: '' });
 
-  useEffect(() => {
+  // Use the "lazy initializer" pattern for useState.
+  // This function runs ONLY ONCE during the initial render.
+  const [user] = useState(() => {
     const localUsername = localStorage.getItem('userUsername');
     const localEmail = localStorage.getItem('userEmail');
-    setUser({
+    return {
       username: localUsername || '',
       email: localEmail || ''
-    });
-  },[])
+    };
+  });
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -47,9 +52,15 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
+  const handleRedirect = (path) => {
+    navigate(path);
+    handleClose();
+  }
+
   const handleLogout = () => {
-    navigate("/login");
-  };
+    AuthService.logout();
+    navigate('/login');
+  }
 
   return (
     <>
@@ -105,7 +116,7 @@ export default function AccountPopover() {
 
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={handleClose}>
+            <MenuItem key={option.label} onClick={() => handleRedirect(option.path)}>
               {option.label}
             </MenuItem>
           ))}

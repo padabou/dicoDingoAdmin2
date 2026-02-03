@@ -1,39 +1,35 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
+// Create the axios instance
 export const axiosInstanceSecure = axios.create({
   baseURL: import.meta.env.VITE_APP_BACKEND_BASE_URL,
 });
 
-const AxiosInterceptor = ({ children }) => {
-  const navigate = useNavigate();
-  const [isSet, setIsSet] = useState(false);
+/**
+ * This function sets up the axios interceptors.
+ * It should be called once in the main entry point of the application (e.g., main.jsx or App.jsx).
+ * @param {object} navigate - The navigate function from react-router-dom.
+ */
+const setupAxiosInterceptors = (navigate) => {
+  const resInterceptor = (response) => {
+    return response;
+  };
 
-  useEffect(() => {
-    const resInterceptor = (response) => {
-      return response;
-    };
+  const errInterceptor = (error) => {
+    // Check if the error is a 401 Unauthorized response
+    if (error.response && error.response.status === 401) {
+      // Redirect to the login page
+      // We use a simple window.location.replace here because this function
+      // is outside the React component tree. This is a clean way to handle
+      // a hard redirect on authentication failure.
+      navigate('/login');
+    }
 
-    const errInterceptor = (error) => {
-      if (error.response.status === 401) {
-        navigate("/login");
-      }
+    return Promise.reject(error);
+  };
 
-      return Promise.reject(error);
-    };
-
-    const interceptor = axiosInstanceSecure.interceptors.response.use(
-      resInterceptor,
-      errInterceptor
-    );
-
-    setIsSet(true);
-
-    return () => axiosInstanceSecure.interceptors.response.eject(interceptor);
-  }, [navigate]);
-
-  return isSet && children;
+  // Add the response interceptor
+  axiosInstanceSecure.interceptors.response.use(resInterceptor, errInterceptor);
 };
 
-export { AxiosInterceptor };
+export { setupAxiosInterceptors };

@@ -1,7 +1,7 @@
 import {Container, Grid, Box} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import AppWidgetSummary from "../designComponents/AppWidgetSummary.jsx";
-import {useEffect, useState, useCallback} from "react";
+import {useEffect, useState, useCallback, useMemo} from "react";
 import EventBus from "../common/EventBus.js";
 import DashboardService from "../services/dashboard.service.js";
 import {useSearchParams} from "react-router-dom";
@@ -11,10 +11,10 @@ import MessagesTable from "../designComponents/contact/MessagesTable.jsx";
 const Home = () => {
     const [data, setData] = useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [visibleTable, setVisibleTable] = useState(searchParams.get('view') || null);
-    const [tableData, setTableData] = useState([]);
-    const [tableTitle, setTableTitle] = useState('');
-    const [page, setPage] = useState(0); // Add page state for local pagination
+    const [page, setPage] = useState(0);
+
+    // DERIVED STATE: Calculate visibleTable directly from the URL on every render.
+    const visibleTable = searchParams.get('view') || null;
 
     const fetchData = useCallback(() => {
         DashboardService.get().then(
@@ -42,39 +42,32 @@ const Home = () => {
         fetchData();
     }, [fetchData]);
 
-    useEffect(() => {
-        if (!data) return;
-
-        const currentView = searchParams.get('view');
-        setVisibleTable(currentView);
-        setPage(0); // Reset page when view changes
-
-        switch (currentView) {
-            case 'messages':
-                setTableData(data.contactMessages || []);
-                setTableTitle("New Messages");
-                break;
-            case 'refreshByIas':
-                setTableData(data.refreshByIas || []);
-                setTableTitle("Articles to Refresh by IA");
-                break;
-            case 'refreshPictureByIas':
-                setTableData(data.refreshPictureByIas || []);
-                setTableTitle("Pictures to Refresh by IA");
-                break;
-            case 'mostViewedArticles':
-                setTableData(data.mostViewedArticles || []);
-                setTableTitle("Top 50 Most Viewed Articles");
-                break;
-            default:
-                setTableData([]);
-                setTableTitle('');
+    // DERIVED DATA: Calculate table data and title using useMemo
+    const { tableData, tableTitle } = useMemo(() => {
+        if (!data || !visibleTable) {
+            return { tableData: [], tableTitle: '' };
         }
-    }, [searchParams, data]);
+
+        switch (visibleTable) {
+            case 'messages':
+                return { tableData: data.contactMessages || [], tableTitle: "New Messages" };
+            case 'refreshByIas':
+                return { tableData: data.refreshByIas || [], tableTitle: "Articles to Refresh by IA" };
+            case 'refreshPictureByIas':
+                return { tableData: data.refreshPictureByIas || [], tableTitle: "Pictures to Refresh by IA" };
+            case 'mostViewedArticles':
+                return { tableData: data.mostViewedArticles || [], tableTitle: "Top 50 Most Viewed Articles" };
+            default:
+                return { tableData: [], tableTitle: '' };
+        }
+    }, [visibleTable, data]);
 
     const handleTileClick = (tableKey) => {
         const currentView = searchParams.get('view');
         const newView = currentView === tableKey ? null : tableKey;
+
+        // Reset page state directly in the event handler
+        setPage(0);
 
         if (newView) {
             setSearchParams({ view: newView });
@@ -82,7 +75,7 @@ const Home = () => {
             setSearchParams({});
         }
     };
-    
+
     const handlePageChange = (event, newPage) => {
         setPage(newPage);
     };
@@ -109,7 +102,7 @@ const Home = () => {
         if (visibleTable === 'messages') {
             return <MessagesTable messages={tableData} onMessageUpdate={fetchData} {...commonTableProps} />;
         }
-        
+
         return <ArticleTable articles={tableData} onArticleUpdate={fetchData} {...commonTableProps} />;
     }
 
