@@ -4,7 +4,7 @@ import {
     Card,
     Table,
     Paper,
-    Popover,
+    Menu,
     Checkbox,
     TableRow,
     MenuItem,
@@ -227,19 +227,39 @@ const MessagesTable = ({ messages, onMessageUpdate, filterName, onFilterName, pa
                 </Scrollbar>
             </Card>
 
-            <Popover
+            <Menu
                 open={Boolean(open)}
                 anchorEl={open}
                 onClose={handleCloseMenu}
-                anchorOrigin={{vertical: 'top', horizontal: 'left'}}
-                transformOrigin={{vertical: 'top', horizontal: 'right'}}
-                PaperProps={{ sx: { p: 1, width: 140, '& .MuiMenuItem-root': { px: 1, typography: 'body2', borderRadius: 0.75 } } }}
+                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                // Migration vers slotProps pour la compatibilité MUI v6/v7+
+                slotProps={{
+                    paper: {
+                        sx: {
+                            p: 1,
+                            width: 140,
+                            '& .MuiMenuItem-root': {
+                                px: 1,
+                                typography: 'body2',
+                                borderRadius: 0.75,
+                                gap: 1.5, // Espace constant entre l'icône et le texte
+                            },
+                        },
+                    },
+                }}
             >
-                <MenuItem sx={{color: 'error.main'}} onClick={() => { setDialogOpen(true); handleCloseMenu(); }}>
-                    <Iconify icon={'eva:trash-2-outline'} sx={{mr: 2}}/>
-                    Delete
+                <MenuItem
+                    sx={{ color: 'error.main' }}
+                    onClick={() => {
+                        setDialogOpen(true);
+                        handleCloseMenu();
+                    }}
+                >
+                    <Iconify icon={'eva:trash-2-outline'} />
+                    Supprimer
                 </MenuItem>
-            </Popover>
+            </Menu>
 
             <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
                 <DialogTitle>Supprimer ?</DialogTitle>

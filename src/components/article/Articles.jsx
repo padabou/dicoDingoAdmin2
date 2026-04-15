@@ -122,11 +122,11 @@ const Articles = () => {
             <title> Articles </title>
 
             <Container maxWidth="xl">
-                <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+                <Stack direction="row" sx={{alignItems:"center", justifyContent:"space-between"}} mb={5}>
                     <Typography variant="h4" gutterBottom>
                         Articles
                     </Typography>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between" width={400}>
+                    <Stack direction="row" sx={{alignItems:"center", justifyContent:"space-between"}} width={400}>
                         <Button variant="contained" onClick={createArticle} sx={{mr: 2}} startIcon={<Iconify icon="eva:plus-fill"/>}>
                             New Article
                         </Button>

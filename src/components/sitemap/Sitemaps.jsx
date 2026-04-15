@@ -5,7 +5,7 @@ import {
     Card,
     Table,
     Paper,
-    Popover,
+    Menu,
     Checkbox,
     TableRow,
     MenuItem,
@@ -215,7 +215,7 @@ const Sitemaps = () => {
             <title> Sitemaps </title>
 
             <Container>
-                <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+                <Stack direction="row" sx={{alignItems:"center", justifyContent:"space-between"}} mb={5}>
                     <Typography variant="h4" gutterBottom>
                         Sitemaps
                     </Typography>
@@ -301,23 +301,50 @@ const Sitemaps = () => {
                 </Card>
             </Container>
 
-            <Popover
+            <Menu
                 open={Boolean(open)}
                 anchorEl={open}
                 onClose={handleCloseMenu}
-                anchorOrigin={{vertical: 'top', horizontal: 'left'}}
-                transformOrigin={{vertical: 'top', horizontal: 'right'}}
-                PaperProps={{ sx: { p: 1, width: 140, '& .MuiMenuItem-root': { px: 1, typography: 'body2', borderRadius: 0.75 } } }}
+                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                // Migration vers slotProps (MUI v6/v7+)
+                slotProps={{
+                    paper: {
+                        sx: {
+                            p: 1,
+                            width: 140,
+                            '& .MuiMenuItem-root': {
+                                px: 1,
+                                typography: 'body2',
+                                borderRadius: 0.75,
+                                gap: 1.5, // Espace moderne entre icône et texte
+                            },
+                        },
+                    },
+                }}
             >
-                <MenuItem sx={{color: 'primary.main'}} onClick={() => navigate(`/sitemap/${editId}`)}>
-                    <Iconify icon={'eva:edit-fill'} sx={{mr: 2}}/>
+                <MenuItem
+                    sx={{ color: 'primary.main' }}
+                    onClick={() => {
+                        navigate(`/sitemap/${editId}`);
+                        handleCloseMenu();
+                    }}
+                >
+                    <Iconify icon={'eva:edit-fill'} />
                     Edit
                 </MenuItem>
-                <MenuItem sx={{color: 'error.main'}} onClick={() => { setDialogOpen(true); handleCloseMenu(); }}>
-                    <Iconify icon={'eva:trash-2-outline'} sx={{mr: 2}}/>
+
+                <MenuItem
+                    sx={{ color: 'error.main' }}
+                    onClick={() => {
+                        setDialogOpen(true);
+                        handleCloseMenu();
+                    }}
+                >
+                    <Iconify icon={'eva:trash-2-outline'} />
                     Delete
                 </MenuItem>
-            </Popover>
+            </Menu>
 
             <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
                 <DialogTitle>Supprimer ?</DialogTitle>

@@ -4,9 +4,9 @@ import {
     Card,
     Table,
     Paper,
-    Popover,
     Checkbox,
     TableRow,
+    Menu,
     MenuItem,
     TableBody,
     TableCell,
@@ -270,33 +270,50 @@ const ArticleTable = ({ articles, onArticleUpdate, filterName, onFilterName, pag
                 </Scrollbar>
             </Card>
 
-            <Popover
-                open={Boolean(open)}
+            <Menu
                 anchorEl={open}
+                open={Boolean(open)}
                 onClose={handleCloseMenu}
-                anchorOrigin={{vertical: 'top', horizontal: 'left'}}
-                transformOrigin={{vertical: 'top', horizontal: 'right'}}
-                PaperProps={{
-                    sx: {
-                        p: 1,
-                        width: 140,
-                        '& .MuiMenuItem-root': {
-                            px: 1,
-                            typography: 'body2',
-                            borderRadius: 0.75,
+                // On garde tes réglages de positionnement
+                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                // On utilise slotProps pour le style du conteneur (standard 2026)
+                slotProps={{
+                    paper: {
+                        sx: {
+                            p: 1,
+                            width: 140,
+                            '& .MuiMenuItem-root': {
+                                px: 1,
+                                typography: 'body2',
+                                borderRadius: 0.75,
+                                gap: 1.5, // Espace propre entre icône et texte
+                            },
                         },
                     },
                 }}
             >
-                <MenuItem sx={{color: 'primary.main'}} component="a" href={`${customBaseName}/article/${editId}`} onClick={handleCloseMenu}>
-                    <Iconify icon={'eva:edit-fill'} sx={{mr: 2}}/>
-                    Edit
+                <MenuItem
+                    sx={{ color: 'primary.main' }}
+                    component="a"
+                    href={`${customBaseName}/article/${editId}`}
+                    onClick={handleCloseMenu}
+                >
+                    <Iconify icon={'eva:edit-fill'} />
+                    Modifier
                 </MenuItem>
-                <MenuItem sx={{color: 'error.main'}} onClick={() => setDialogOpen(true)}>
-                    <Iconify icon={'eva:trash-2-outline'} sx={{mr: 2}}/>
-                    Delete
+
+                <MenuItem
+                    sx={{ color: 'error.main' }}
+                    onClick={() => {
+                        setDialogOpen(true);
+                        handleCloseMenu();
+                    }}
+                >
+                    <Iconify icon={'eva:trash-2-outline'} />
+                    Supprimer
                 </MenuItem>
-            </Popover>
+            </Menu>
 
             <Dialog open={dialogOpen}>
                 <DialogTitle>Supprimer ?</DialogTitle>

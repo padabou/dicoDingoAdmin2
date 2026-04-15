@@ -4,8 +4,7 @@ import {
   Card,
   Table,
   Stack,
-  Popover,
-  Link,
+  Menu,
   MenuItem,
   Checkbox,
   TableRow,
@@ -110,7 +109,7 @@ const BoardUser = () => {
       <Container>
         <Stack
           direction="row"
-          alignItems="center"
+          sx={{alignItems:"center"}}
           justifyContent="space-between"
           mb={5}
         >
@@ -180,34 +179,49 @@ const BoardUser = () => {
         </Card>
       </Container>
 
-      <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: "top", horizontal: "left" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-        PaperProps={{
-          sx: {
-            p: 1,
-            width: 140,
-            "& .MuiMenuItem-root": {
-              px: 1,
-              typography: "body2",
-              borderRadius: 0.75,
+      <Menu
+          open={Boolean(open)}
+          anchorEl={open}
+          onClose={handleCloseMenu}
+          anchorOrigin={{ vertical: "top", horizontal: "left" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
+          // Utilisation de slotProps pour la conformité MUI v6/v7+
+          slotProps={{
+            paper: {
+              sx: {
+                p: 1,
+                width: 140,
+                "& .MuiMenuItem-root": {
+                  px: 1,
+                  typography: "body2",
+                  borderRadius: 0.75,
+                  gap: 1.5, // Gestion propre de l'espace icône/texte
+                },
+              },
             },
-          },
-        }}
+          }}
       >
-        <MenuItem>
-          <Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
-          <Link onClick={handleRedirect}>Edit</Link>
+        <MenuItem
+            onClick={() => {
+              handleRedirect();
+              handleCloseMenu();
+            }}
+        >
+          <Iconify icon={"eva:edit-fill"} />
+          Edit
         </MenuItem>
 
-        <MenuItem sx={{ color: "error.main" }}>
-          <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
-          <Link onClick={() => setDialogOpen(true)}>Delete</Link>
+        <MenuItem
+            sx={{ color: "error.main" }}
+            onClick={() => {
+              setDialogOpen(true);
+              handleCloseMenu();
+            }}
+        >
+          <Iconify icon={"eva:trash-2-outline"} />
+          Delete
         </MenuItem>
-      </Popover>
+      </Menu>
       <Dialog open={dialogOpen}>
         <DialogTitle id="alert-dialog-title">Supprimer ?</DialogTitle>
         <DialogContent>

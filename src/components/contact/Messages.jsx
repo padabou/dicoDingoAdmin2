@@ -71,7 +71,7 @@ const Messages = () => {
             <title> Messages </title>
 
             <Container>
-                <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+                <Stack direction="row" sx={{alignItems:"center", justifyContent:"space-between"}} mb={5}>
                     <Typography variant="h4" gutterBottom>
                         Messages
                     </Typography>

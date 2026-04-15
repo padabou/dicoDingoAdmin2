@@ -62,7 +62,7 @@ export default function Header({ onOpenNav }) {
 
         <Stack
           direction="row"
-          alignItems="center"
+          sx={{alignItems:"center"}}
           spacing={{
             xs: 0.5,
             sm: 1,

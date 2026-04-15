@@ -110,18 +110,22 @@ export default function NotificationsPopover() {
       </IconButton>
 
       <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            mt: 1.5,
-            ml: 0.75,
-            width: 360,
-          },
-        }}
+          open={Boolean(open)}
+          anchorEl={open}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          slotProps={{
+            paper: {
+              sx: {
+                mt: 1.5,
+                ml: 0.75,
+                width: 360,
+                // Évite les comportements de focus bizarres sur les listes longues
+                overflow: 'inherit',
+              },
+            },
+          }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', py: 2, px: 2.5 }}>
           <Box sx={{ flexGrow: 1 }}>
@@ -132,11 +136,11 @@ export default function NotificationsPopover() {
           </Box>
 
           {totalUnRead > 0 && (
-            <Tooltip title=" Mark all as read">
-              <IconButton color="primary" onClick={handleMarkAllAsRead}>
-                <Iconify icon="eva:done-all-fill" />
-              </IconButton>
-            </Tooltip>
+              <Tooltip title="Mark all as read">
+                <IconButton color="primary" onClick={handleMarkAllAsRead}>
+                  <Iconify icon="eva:done-all-fill" />
+                </IconButton>
+              </Tooltip>
           )}
         </Box>
 
@@ -144,28 +148,29 @@ export default function NotificationsPopover() {
 
         <Scrollbar sx={{ height: { xs: 340, sm: 'auto' } }}>
           <List
-            disablePadding
-            subheader={
-              <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
-                New
-              </ListSubheader>
-            }
+              disablePadding
+              subheader={
+                <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
+                  New
+                </ListSubheader>
+              }
           >
+            {/* Ici, NotificationItem utilisera ListItemButton en interne */}
             {notifications.slice(0, 2).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
+                <NotificationItem key={notification.id} notification={notification} />
             ))}
           </List>
 
           <List
-            disablePadding
-            subheader={
-              <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
-                Before that
-              </ListSubheader>
-            }
+              disablePadding
+              subheader={
+                <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
+                  Before that
+                </ListSubheader>
+              }
           >
             {notifications.slice(2, 5).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
+                <NotificationItem key={notification.id} notification={notification} />
             ))}
           </List>
         </Scrollbar>
@@ -173,7 +178,7 @@ export default function NotificationsPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Box sx={{ p: 1 }}>
-          <Button fullWidth disableRipple>
+          <Button fullWidth disableRipple onClick={handleClose}>
             View All
           </Button>
         </Box>

@@ -7,7 +7,7 @@ import {
     Stack,
     Paper,
     Button,
-    Popover,
+    Menu,
     Checkbox,
     TableRow,
     MenuItem,
@@ -180,7 +180,7 @@ const Types = () => {
         <>
             <title>Types</title>
             <Container>
-                <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+                <Stack direction="row" sx={{alignItems:"center", justifyContent:"space-between"}} mb={5}>
                     <Typography variant="h4" gutterBottom>
                         Types
                     </Typography>
@@ -276,34 +276,50 @@ const Types = () => {
                 </Card>
             </Container>
 
-            <Popover
+            <Menu
                 open={Boolean(open)}
                 anchorEl={open}
                 onClose={handleCloseMenu}
                 anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                PaperProps={{
-                    sx: {
-                        p: 1,
-                        width: 140,
-                        '& .MuiMenuItem-root': {
-                            px: 1,
-                            typography: 'body2',
-                            borderRadius: 0.75,
+                // Migration vers slotProps pour MUI v6/v7+ (2026)
+                slotProps={{
+                    paper: {
+                        sx: {
+                            p: 1,
+                            width: 140,
+                            '& .MuiMenuItem-root': {
+                                px: 1,
+                                typography: 'body2',
+                                borderRadius: 0.75,
+                                gap: 1.5, // Remplacement moderne de sx={{ mr: 2 }} sur l'icône
+                            },
                         },
                     },
                 }}
             >
-                <MenuItem sx={{ color: 'primary.main' }} onClick={handleEdit}>
-                    <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+                <MenuItem
+                    sx={{ color: 'primary.main' }}
+                    onClick={() => {
+                        handleEdit();
+                        handleCloseMenu(); // Toujours fermer le menu après l'action
+                    }}
+                >
+                    <Iconify icon={'eva:edit-fill'} />
                     Edit
                 </MenuItem>
 
-                <MenuItem sx={{ color: 'error.main' }} onClick={() => setDialogOpen(true)}>
-                    <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
+                <MenuItem
+                    sx={{ color: 'error.main' }}
+                    onClick={() => {
+                        setDialogOpen(true);
+                        handleCloseMenu();
+                    }}
+                >
+                    <Iconify icon={'eva:trash-2-outline'} />
                     Delete
                 </MenuItem>
-            </Popover>
+            </Menu>
 
             <Dialog
                 open={dialogOpen}

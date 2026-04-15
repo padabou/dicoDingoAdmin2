@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import {useState} from 'react';
 // @mui
-import { alpha } from '@mui/material/styles';
-import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
+import {alpha} from '@mui/material/styles';
+import {Avatar, Box, Divider, IconButton, MenuItem, Menu, Stack, Typography} from '@mui/material';
 // mocks_
 import account from '../../../_mock/account';
 import {useNavigate} from "react-router-dom";
@@ -84,26 +84,30 @@ export default function AccountPopover() {
         <Avatar src={account.photoURL} alt="photoURL" />
       </IconButton>
 
-      <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            p: 0,
-            mt: 1.5,
-            ml: 0.75,
-            width: 180,
-            '& .MuiMenuItem-root': {
-              typography: 'body2',
-              borderRadius: 0.75,
+      <Menu
+          open={Boolean(open)}
+          anchorEl={open}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          // Migration slotProps (MUI v6+)
+          slotProps={{
+            paper: {
+              sx: {
+                p: 0,
+                mt: 1.5,
+                ml: 0.75,
+                width: 180,
+                '& .MuiMenuItem-root': {
+                  typography: 'body2',
+                  borderRadius: 0.75,
+                },
+              },
             },
-          },
-        }}
+          }}
       >
-        <Box sx={{ my: 1.5, px: 2.5 }}>
+        {/* Header : On garde le Box mais il est rendu à l'intérieur du MenuList */}
+        <Box sx={{ my: 1.5, px: 2.5, outline: 'none' }}>
           <Typography variant="subtitle2" noWrap>
             {user.username}
           </Typography>
@@ -114,20 +118,33 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
+        {/* On peut garder le Stack pour le padding, le MenuList gérera les MenuItem à l'intérieur */}
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={() => handleRedirect(option.path)}>
-              {option.label}
-            </MenuItem>
+              <MenuItem
+                  key={option.label}
+                  onClick={() => {
+                    handleRedirect(option.path);
+                    handleClose();
+                  }}
+              >
+                {option.label}
+              </MenuItem>
           ))}
         </Stack>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
+        <MenuItem
+            onClick={() => {
+              handleLogout();
+              handleClose();
+            }}
+            sx={{ m: 1 }}
+        >
           Logout
         </MenuItem>
-      </Popover>
+      </Menu>
     </>
   );
 }
