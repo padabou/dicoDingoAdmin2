@@ -58,8 +58,17 @@ export default function RichTextArea({ content, onChange, name, ...props }) {
 
     // Mise à jour si le contenu change via les props (ex: reset du formulaire)
     useEffect(() => {
-        if (quillRef.current && content !== quillRef.current.root.innerHTML) {
-            quillRef.current.root.innerHTML = content || "";
+        if (quillRef.current && content !== undefined) {
+            if (content !== quillRef.current.root.innerHTML) {
+                // On convertit les div en p avant l'injection
+                let cleanContent = content;
+                if (content.includes('<div')) {
+                    cleanContent = content
+                        .replace(/<div/g, '<p')
+                        .replace(/<\/div>/g, '</p>');
+                }
+                quillRef.current.root.innerHTML = cleanContent || "";
+            }
         }
     }, [content]);
 
