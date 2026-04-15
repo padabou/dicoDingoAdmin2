@@ -67,6 +67,8 @@ export default function RichTextArea({ content, onChange, name, ...props }) {
                         .replace(/<div/g, '<p')
                         .replace(/<\/div>/g, '</p>');
                 }
+                console.log(content)
+                console.log(cleanContent)
                 quillRef.current.root.innerHTML = cleanContent || "";
             }
         }
