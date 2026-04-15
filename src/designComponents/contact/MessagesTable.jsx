@@ -61,6 +61,8 @@ const applySortFilter = (array, comparator, query) => {
 const MessagesTable = ({ messages, onMessageUpdate, filterName, onFilterName, page, onPageChange }) => {
     const [open, setOpen] = useState(null);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [viewDialogOpen, setViewDialogOpen] = useState(false);
+    const [viewMessage, setViewMessage] = useState(null);
     const [editId, setEditId] = useState(0);
     const [editLabel, setEditLabel] = useState("");
     const [order, setOrder] = useState('desc');
@@ -86,6 +88,16 @@ const MessagesTable = ({ messages, onMessageUpdate, filterName, onFilterName, pa
 
     const handleCloseMenu = () => {
         setOpen(null);
+    };
+
+    const handleOpenViewDialog = (row) => {
+        setViewMessage(row);
+        setViewDialogOpen(true);
+    };
+
+    const handleCloseViewDialog = () => {
+        setViewDialogOpen(false);
+        setViewMessage(null);
     };
 
     const handleRequestSort = (event, property) => {
@@ -188,7 +200,19 @@ const MessagesTable = ({ messages, onMessageUpdate, filterName, onFilterName, pa
                                             <TableCell padding="checkbox">
                                                 <Checkbox checked={isSelected} onChange={(event) => handleClick(event, id)}/>
                                             </TableCell>
-                                            <TableCell><Typography variant="subtitle2">{username}</Typography></TableCell>
+                                            <TableCell>
+                                                <Typography 
+                                                    variant="subtitle2" 
+                                                    onClick={() => handleOpenViewDialog(row)}
+                                                    sx={{ 
+                                                        cursor: 'pointer', 
+                                                        color: 'primary.main',
+                                                        '&:hover': { textDecoration: 'underline' } 
+                                                    }}
+                                                >
+                                                    {username}
+                                                </Typography>
+                                            </TableCell>
                                             <TableCell align="left">{email}</TableCell>
                                             <TableCell align="left" sx={{maxWidth: 400, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{message}</TableCell>
                                             <TableCell align="left">{createdAt}</TableCell>
@@ -271,6 +295,28 @@ const MessagesTable = ({ messages, onMessageUpdate, filterName, onFilterName, pa
                 <DialogActions>
                     <Button onClick={() => setDialogOpen(false)} color="error">Fermer</Button>
                     <Button onClick={handleDelete} autoFocus>Continuer</Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog open={viewDialogOpen} onClose={handleCloseViewDialog} maxWidth="sm" fullWidth>
+                <DialogTitle sx={{ m: 0, p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    Message de {viewMessage?.username}
+                    <IconButton onClick={handleCloseViewDialog}>
+                        <Iconify icon={'eva:close-fill'} />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent dividers>
+                    <Typography variant="body2" sx={{ mb: 2 }}>
+                        <strong>Email:</strong> {viewMessage?.email}
+                        <br />
+                        <strong>Date:</strong> {viewMessage?.createdAt}
+                    </Typography>
+                    <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
+                        {viewMessage?.message}
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseViewDialog}>Fermer</Button>
                 </DialogActions>
             </Dialog>
 
