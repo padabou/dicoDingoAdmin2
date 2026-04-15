@@ -1,93 +1,42 @@
-import React, { useEffect, useRef, useState } from "react";
-import Quill from "quill";
+import React from 'react';
+import { Editor } from '@tinymce/tinymce-react';
 
-// Import du style obligatoire
-import "quill/dist/quill.snow.css";
+export default function RichTextArea({ content, onChange, name }) {
 
-export default function RichTextArea({ content, onChange, name, ...props }) {
-    const editorRef = useRef(null);
-    const quillRef = useRef(null);
-    const [isEmpty, setIsEmpty] = useState(false);
-
-    // Ta logique de validation "required" adaptée
-    const checkRequired = (htmlContent) => {
-        // Quill génère souvent "<p><br></p>" quand il est vide
-        const isActuallyEmpty = !htmlContent || htmlContent === "<p><br></p>";
-        setIsEmpty(isActuallyEmpty);
+    const handleEditorChange = (newContent) => {
+        if (onChange) {
+            onChange(newContent);
+        }
     };
-
-    useEffect(() => {
-        if (editorRef.current && !quillRef.current) {
-            // Configuration de la barre d'outils (mapping de ta buttonList SunEditor)
-            const toolbarOptions = [
-                ['undo', 'redo'], // Nécessite une petite config CSS/JS pour les icônes si tu les veux vraiment
-                [{ 'header': [1, 2, 3, false] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'align': [] }, { 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'indent': '-1'}, { 'indent': '+1' }],
-                ['link', 'blockquote', 'code-block'],
-                ['clean'] // Le "removeFormat"
-            ];
-
-            quillRef.current = new Quill(editorRef.current, {
-                theme: "snow",
-                modules: {
-                    toolbar: toolbarOptions,
-                    history: { delay: 1000, maxStack: 100, userOnly: true }
-                },
-                placeholder: 'Écrivez ici...',
-            });
-
-            // Injection du contenu initial
-            if (content) {
-                quillRef.current.root.innerHTML = content;
-            }
-
-            // Listener de changement
-            quillRef.current.on('text-change', () => {
-                const html = quillRef.current.root.innerHTML;
-                if (onChange) {
-                    onChange(html); // On renvoie le HTML à ton parent
-                }
-                checkRequired(html);
-            });
-        }
-    }, [content]);
-
-    // Mise à jour si le contenu change via les props (ex: reset du formulaire)
-    useEffect(() => {
-        if (quillRef.current && content !== undefined) {
-            if (content !== quillRef.current.root.innerHTML) {
-                // On convertit les div en p avant l'injection
-                let cleanContent = content;
-                if (content.includes('<div')) {
-                    cleanContent = content
-                        .replace(/<div/g, '<p')
-                        .replace(/<\/div>/g, '</p>');
-                }
-                console.log(content)
-                console.log(cleanContent)
-                quillRef.current.root.innerHTML = cleanContent || "";
-            }
-        }
-    }, [content]);
 
     return (
         <div className="mb-3">
-            <div className="quill-wrapper bg-white">
-                <div ref={editorRef} style={{ minHeight: "300px" }} />
-            </div>
+            <Editor
+                // Pour éviter de créer un compte cloud, on peut utiliser un CDN public
+                // ou l'installer en local (ici via CDN pour aller vite)
+                tinymceScriptSrc="https://cdn.tiny.cloud/1/qtit0r50u6i26jjlkz4ceahj35l41qpfuylikwp6biz1g0of/tinymce/7/tinymce.min.js"
+                value={content}
+                init={{
+                    height: 300,
+                    menubar: false,
+                    plugins: [
+                        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                        'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                    ],
+                    toolbar: 'undo redo | blocks | ' +
+                        'bold italic forecolor | alignleft aligncenter ' +
+                        'alignright alignjustify | bullist numlist outdent indent | ' +
+                        'removeformat | help',
+                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                    // C'est ici que TinyMCE devient ton ami :
+                    extended_valid_elements: 'div[*]', // Autorise TOUTES les div avec n'importe quels attributs
+                    valid_children: '+body[div]',      // Autorise les div à la racine
+                }}
+                onEditorChange={handleEditorChange}
+            />
 
-            {/* Affichage de ta validation required */}
-            {isEmpty && (
-                <div className="alert alert-danger mt-2" role="alert">
-                    Ce champ est requis !
-                </div>
-            )}
-
-            {/* Input caché pour conserver la compatibilité avec les formulaires classiques si besoin */}
+            {/* Input caché pour tes formulaires existants */}
             <input type="hidden" name={name} value={content} />
         </div>
     );
