@@ -54,7 +54,7 @@ export default function RichTextArea({ content, onChange, name, ...props }) {
                 checkRequired(html);
             });
         }
-    }, []);
+    }, [content]);
 
     // Mise à jour si le contenu change via les props (ex: reset du formulaire)
     useEffect(() => {
