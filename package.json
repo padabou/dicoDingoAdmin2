@@ -20,7 +20,7 @@
     "@mui/system": "^9.0.0",
     "@mui/x-date-pickers": "^9.0.0",
     "@tinymce/tinymce-react": "^6.3.0",
-    "axios": "^1.15.0",
+    "axios": "^1.15.1",
     "bootstrap": "^5.3.8",
     "change-case": "^5.4.4",
     "date-fns": "^4.1.0",
