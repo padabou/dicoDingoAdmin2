@@ -16,7 +16,7 @@
     "@faker-js/faker": "^10.4.0",
     "@iconify/react": "^6.0.2",
     "@mui/icons-material": "^9.0.0",
-    "@mui/material": "^9.0.0",
+    "@mui/material": "^9.0.1",
     "@mui/system": "^9.0.0",
     "@mui/x-date-pickers": "^9.0.4",
     "@tinymce/tinymce-react": "^6.3.0",
