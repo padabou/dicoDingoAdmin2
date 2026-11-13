@@ -18,7 +18,7 @@
     "@mui/icons-material": "^9.4.0",
     "@mui/material": "^9.3.1",
     "@mui/system": "^9.2.0",
-    "@mui/x-date-pickers": "^9.11.0",
+    "@mui/x-date-pickers": "^9.14.0",
     "@tinymce/tinymce-react": "^6.3.0",
     "axios": "^1.19.0",
     "bootstrap": "^5.3.8",
